@@ -1,5 +1,6 @@
 :root {
   --background: #ffffff;
+  --background-to-top-btn: #aaa;
   --foreground: #171717;
   --primary-container: 1200px;
   --accent-color1: #9f0000;
@@ -7,17 +8,89 @@
   --accent-color3: #ffffff;
   --accent-color4: slategray;
   --accent-color5: #474854;
+  --accent-color6: #437fa3;
+  --accent-color7: #7e0000;
+  --footer-divider: #ddd;
+  --footer-menu-link: #474854;
+  --footer-menu-left-border: #eeeeee;
+  --footer-column-menu-title-size: 18px;
+  --footer-column-menu-title-size-tab: 16px;
+  --footer-column-menu-title-size-mobile: 14px;
+  --footer-column-menu-link-size: 16px;
+  --footer-column-menu-link-size-tab: 14px;
+  --footer-column-menu-link-size-mobile: 12px;
+  --socials-icon-gap: 8px;
+  --socials-icon-gap-tab: 6px;
+  --socials-icon-gap-mobile: 4px;
+  --socials-icon-width: 40px;
+  --socials-icon-width-tab: 34px;
+  --socials-icon-width-mobile: 40px;
+  --socials-icon-height: 40px;
+  --socials-icon-height-tab: 34px;
+  --socials-icon-height-mobile: 40px;
+  --socialsHelp-title: 16px;
+  --socialsHelp-icon-gap: 8px;
+  --socialsHelp-icon-gap-tab: 6px;
+  --socialsHelp-icon-gap-mobile: 4px;
+  --socialsHelp-icon-width: 40px;
+  --socialsHelp-icon-width-tab: 34px;
+  --socialsHelp-icon-width-mobile: 40px;
+  --socialsHelp-icon-height: 40px;
+  --socialsHelp-icon-height-tab: 34px;
+  --socialsHelp-icon-height-mobile: 40px;
+  // --site-name-size: clamp(1rem, 0.6vw + 1rem, 1.5rem);
+  --site-name-size: 1.5rem;
+  --site-name-size-tab: 1.6rem;
+  --site-name-size-mobile: 1.2rem;
+
+  // Нові змінні для хедера та футера, якщо їх ще немає в SCSS-змінних
+  --background-header: #007bff;
+  --foreground-header: white;
+  --background-footer: #f8f8f8;
+  --foreground-footer: white;
+
+  --header-height: 208px;
+  --header-height-mobile: 102px;
+  --header-height-mobile-menu: 300px;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
+
+    --background-header: #1a1a1a;
+    --foreground-header: #ededed;
+    --background-footer: #222;
+    --foreground-footer: #cccccc;
   }
 }
 
-html,
-body {
+// "Сіра" тема (для людей з порушенням зору) - активується через JavaScript
+body.theme-grayscale {
+  // Визнач кольори для сірої теми тут
+  --background: #f0f0f0; // Світло-сірий фон
+  --foreground: #333333; // Темно-сірий текст
+  --accent-color1: #666666; // Інші акцентні кольори в сірих тонах
+  --accent-color2: #999999;
+  --accent-color3: #cccccc;
+  --accent-color4: #aaaaaa;
+  --accent-color5: #888888;
+
+  // Оновлення кольорів для хедера та футера в сірій темі
+  --background-header: #555555;
+  --foreground-header: #eeeeee;
+  --background-footer: #777777;
+  --foreground-footer: #dddddd;
+
+  // Додаткові стилі для покращення доступності, якщо потрібно
+  filter: grayscale(
+    100%
+  ); /* Це може допомогти, але будь обережним з картинками */
+  /* Або краще окремо стилізувати елементи, уникаючи filter, щоб не впливати на зображення */
+}
+
+html{
   max-width: 100vw;
   overflow-x: hidden;
 }
@@ -25,7 +98,7 @@ body {
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-roboto), Arial, Helvetica, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -44,5 +117,28 @@ a {
 @media (prefers-color-scheme: dark) {
   html {
     color-scheme: dark;
+  }
+}
+
+.container {
+  max-width: var(--primary-container);
+  width: 100%;
+  margin: 0 auto;
+  padding: 16px 20px;
+  &__header {
+    padding-bottom: 1px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .container {
+    margin: 0 auto;
+    padding: 16px;
+      &__header {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
   }
 }
