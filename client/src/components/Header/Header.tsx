@@ -4,7 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import styles from "./Header.module.scss";
 import { useTheme } from "../../hooks/useTheme";
-import { useWindowWidth } from "../../hooks/useWindowWidth";
+import { useWindowWidth } from "../../hooks/useWindowWidth"; // Можна видалити, якщо більше ніде не юзається
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
 import { headerMenuItems } from "../../config/menus";
@@ -13,33 +13,19 @@ const Header = () => {
   const { theme, toggleTheme } = useTheme();
   const [mobileMenuStatus, setMobileMenuStatus] = useState(false);
   const pathname = usePathname();
-  const windowWidth = useWindowWidth();
+  const windowWidth = useWindowWidth(); // Можна видалити, якщо використовувався тільки для заголовка
 
   const breakpoint = 768;
 
-  const getSiteTitle = () => {
-    if (windowWidth <= breakpoint) {
-      return "ЛОУНБ";
-    }
-    return "Луганська обласна універсальна наукова бібліотека";
-  };
-  
   const toggleMobileMenu = () => {
-    setMobileMenuStatus(prevStatus => !prevStatus);
+    setMobileMenuStatus((prevStatus) => !prevStatus);
   };
-  
+
   useEffect(() => {
     if (windowWidth > breakpoint) {
       setMobileMenuStatus(false);
     }
   }, [windowWidth, breakpoint]);
-
-    const getThemeButtonText = () => {
-    if (theme === "light") return "Темна тема";
-    if (theme === "dark") return "Сіра тема";
-    if (theme === "grayscale") return "Світла тема";
-    return "Змінити тему";
-  };
 
   return (
     <header className={styles.header}>
@@ -52,9 +38,26 @@ const Header = () => {
             height={70}
             className={styles.brand__logo}
           />
-          <span className={styles.brand__siteName}>{getSiteTitle()}</span>
+          
+          {/* --- ЗМІНИ ТУТ: Виводимо обидва варіанти тексту з різними класами --- */}
+          
+          {/* Цей текст видно на Desktop, сховано на Mobile */}
+          <span className={`${styles.brand__siteName} ${styles.brand__siteNameDesktop}`}>
+            Луганська обласна універсальна наукова бібліотека
+          </span>
+
+          {/* Цей текст видно на Mobile, сховано на Desktop */}
+          <span className={`${styles.brand__siteName} ${styles.brand__siteNameMobile}`}>
+            ЛОУНБ
+          </span>
+          
+          {/* ------------------------------------------------------------------ */}
         </Link>
-        <nav className={`${styles.nav} ${mobileMenuStatus ? styles.nav__active : ''}`}>
+        <nav
+          className={`${styles.nav} ${
+            mobileMenuStatus ? styles.nav__active : ""
+          }`}
+        >
           {headerMenuItems.map((item) => (
             <Link
               key={item.name}
@@ -69,9 +72,14 @@ const Header = () => {
           ))}
         </nav>
         <div className={styles.specificControls}>
-          <button onClick={() => toggleTheme()} className={styles.themeToggleBtn}>
-          </button>
-          <button onClick={toggleMobileMenu} className={styles.navToggleMobile}>
+          <button
+            onClick={() => toggleTheme()}
+            className={styles.themeToggleBtn}
+          ></button>
+          <button
+            onClick={toggleMobileMenu}
+            className={styles.navToggleMobile}
+          >
             <span className={styles.navToggleMobile__span}></span>
             <span className={styles.navToggleMobile__span}></span>
             <span className={styles.navToggleMobile__span}></span>

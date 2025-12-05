@@ -3,7 +3,7 @@
   width: 100%;
   position: sticky;
   top: 0;
-  z-index: 1000; /* Це гарантує, що хедер буде поверх іншого контенту */
+  z-index: 1000;
 }
 
 .themeToggleBtn {
@@ -33,6 +33,15 @@
     color: var(--foreground-header);
     margin-left: 30px;
     padding-right: 36px;
+
+    /* --- ЗМІНИ ТУТ: Логіка відображення для десктопу --- */
+    &Desktop {
+      display: block;
+    }
+    &Mobile {
+      display: none;
+    }
+    /* --------------------------------------------------- */
   }
 }
 
@@ -94,6 +103,20 @@
   .header {
     height: var(--header-height-mobile);
   }
+
+  /* --- ЗМІНИ ТУТ: Перемикаємо видимість тексту для мобільного --- */
+  .brand {
+    &__siteName {
+      &Desktop {
+        display: none;
+      }
+      &Mobile {
+        display: block;
+      }
+    }
+  }
+  /* ------------------------------------------------------------- */
+
   .nav {
     max-height: 0;
     overflow: hidden;

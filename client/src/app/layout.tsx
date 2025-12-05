@@ -5,6 +5,8 @@ import Header from "../components/Header/Header";
 import Footer from "../components/Footer/Footer";
 import ToTopBtn from "@/components/ToTopBtn/ToTopBtn";
 import { ThemeProvider } from "../context/ThemeContext";
+// Імпортуємо Redux провайдер (який ми створили раніше)
+import StoreProvider from "../lib/redux/StoreProvider"; 
 
 const roboto = Roboto({
   weight: ["400", "700"],
@@ -25,15 +27,19 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="uk" className={`${roboto.variable}`}>
-      <ThemeProvider>
-        <body>
-          <Header />
-          <main className="container">{children}</main>
-          <Footer/>
-          <ToTopBtn />
-        </body>
-      </ThemeProvider>
+    <html lang="uk">
+      {/* Клас шрифту додаємо до body */}
+      <body className={roboto.className}>
+        {/* Спочатку йде Redux (дані), потім Тема (інтерфейс) */}
+        <StoreProvider>
+          <ThemeProvider>
+            <Header />
+            <main className="container">{children}</main>
+            <Footer />
+            <ToTopBtn />
+          </ThemeProvider>
+        </StoreProvider>
+      </body>
     </html>
   );
 }

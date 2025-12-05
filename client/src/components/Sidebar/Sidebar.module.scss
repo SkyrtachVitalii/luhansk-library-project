@@ -1,0 +1,21 @@
+// client/src/components/Sidebar/Sidebar.module.scss
+.sidebar {
+  /* Можна додати стилі для контейнера сайдбару, наприклад, липке позиціювання */
+  // position: sticky;
+  // top: 20px;
+}
+
+.widgetPlaceholder {
+  border: 1px solid #ddd;
+  background-color: #f9f9f9;
+  padding: 20px;
+  text-align: center;
+  color: #666;
+  border-radius: 8px;
+  /* Тут пізніше буде справжній iframe від Facebook */
+  min-height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-style: italic;
+}
