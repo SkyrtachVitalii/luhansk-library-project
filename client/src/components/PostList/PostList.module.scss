@@ -23,7 +23,7 @@
   // Використовуємо змінну для червоного кольору (якщо вона є у globals.scss), інакше хардкод
   color: var(--accent-color-red, #c00000);
   font-size: 1.8rem;
-  font-weight: 700;
+  font-weight: 400;
   line-height: 1.3;
   text-decoration: none;
   display: block;
@@ -39,13 +39,14 @@
   text-align: right; // Дата праворуч
   color: #888;
   font-size: 0.9rem;
+  font-weight: bold;
 }
 
 .postImageContainer {
   position: relative;
   width: 100%;
   // Встановлюємо фіксовану висоту для зображення або співвідношення сторін
-  height: 400px; 
+  aspect-ratio: 1200 / 458; // Приклад для 1200x458px
   margin-bottom: 25px;
   background-color: #f0f0f0; // Сірий фон, поки вантажиться картинка
   border-radius: 8px;
@@ -58,7 +59,7 @@
 
   img {
     // Важливо для next/image, щоб картинка заповнила контейнер і не спотворилась
-    object-fit: cover; 
+    object-fit: cover;
   }
 }
 
@@ -66,5 +67,55 @@
   font-size: 1.1rem;
   line-height: 1.6;
   color: var(--foreground-primary, #333);
-  white-space: pre-wrap; // Зберігає переноси рядків, якщо вони є в тексті
+  margin-top: 20px;
+
+  // Стилі для звичайного тексту (нових постів)
+  white-space: pre-wrap;
+  > h3 {
+    font-size: 24px;
+    margin-top: 27px;
+    margin-bottom: 13.5px;
+    font-family: inherit;
+    font-weight: 400;
+    line-height: 1.1;
+    color: #444444;
+  }
+  >:first-child {
+    /* стилі для першого блоку */
+    display: none;
+  }
+}
+
+// Спеціальний клас для архівних новин
+.archivedContent {
+  // Тут ми скидаємо white-space, бо HTML вже має свої відступи
+  white-space: normal;
+
+  // Хитрість: ховаємо всі картинки ВСЕРЕДИНІ тексту архівних новин,
+  // бо там старі неробочі шляхи (/upload/...).
+  // Головна картинка зверху все одно залишиться!
+  img {
+    display: none !important;
+  }
+
+  // Трохи стилізуємо старі параграфи
+  p {
+    margin-bottom: 1rem;
+    text-align: justify;
+  }
+}
+
+.readMoreContainer {
+  margin-top: 16px;
+  text-align: right;
+
+  &__link {
+    color: #c00000;
+    font-weight: 600;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
 }

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Roboto } from "next/font/google";
+// import { Roboto } from "next/font/google";
 import "./globals.scss";
 import Header from "../components/Header/Header";
 import Footer from "../components/Footer/Footer";
@@ -8,12 +8,12 @@ import { ThemeProvider } from "../context/ThemeContext";
 // Імпортуємо Redux провайдер (який ми створили раніше)
 import StoreProvider from "../lib/redux/StoreProvider"; 
 
-const roboto = Roboto({
-  weight: ["400", "700"],
-  subsets: ["latin", "cyrillic"],
-  variable: "--font-roboto",
-  display: "swap",
-});
+// const roboto = Roboto({
+//   weight: ["400", "700"],
+//   subsets: ["latin", "cyrillic"],
+//   variable: "--font-roboto",
+//   display: "swap",
+// });
 
 export const metadata: Metadata = {
   title: "ЛОУНБ",
@@ -29,7 +29,8 @@ export default function RootLayout({
   return (
     <html lang="uk">
       {/* Клас шрифту додаємо до body */}
-      <body className={roboto.className}>
+      {/* <body className={roboto.className}> */}
+      <body>
         {/* Спочатку йде Redux (дані), потім Тема (інтерфейс) */}
         <StoreProvider>
           <ThemeProvider>

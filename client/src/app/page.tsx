@@ -8,9 +8,6 @@ export default function Home() {
       
       {/* Ліва частина: Новини */}
       <div className={styles.mainColumn}>
-        <h1 className="text-3xl font-bold mb-6 text-[#c00000]">
-          Новини та події
-        </h1>
         <PostList />
       </div>
 

@@ -6,11 +6,12 @@ import { IPost } from '../types/post.interface'; // Імпортуємо інт�
 const PostSchema: Schema = new Schema(
   {
     title: { type: String, required: true },
+    shortDescription: { type: String, default: '' }, // <-- ДОДАЄМО ТУТ
     content: { type: String, required: true },
     imageUrl: { type: String, default: '' },
     category: {
       type: String,
-      enum: ['news', 'event', 'announcement'],
+      enum: ['news', 'event', 'announcement', 'recommends'],
       default: 'news',
     },
     viewsCount: { type: Number, default: 0 },

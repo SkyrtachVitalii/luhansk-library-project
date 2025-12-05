@@ -31,7 +31,14 @@ export const createPost = async (req: Request, res: Response) => {
 // Отримання всіх постів
 export const getAllPosts = async (req: Request, res: Response) => {
   try {
-    const posts = await Post.find().sort({ createdAt: -1 }); // Найновіші зверху
+    // Було:
+    // const posts = await Post.find().sort({ createdAt: -1 });
+    
+    // Стало (додали .limit(20)):
+    const posts = await Post.find()
+      .sort({ createdAt: -1 }) // Спочатку нові
+      .limit(20);              // Взяти тільки перші 20 штук
+      
     res.json(posts);
   } catch (error) {
     console.error(error);

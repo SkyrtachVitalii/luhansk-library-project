@@ -5,6 +5,7 @@ MongoDB.txt
 
 # Node.js and Package Manager dependencies
 node_modules
+upload
 /.pnp
 .pnp.*
 .yarn/*
