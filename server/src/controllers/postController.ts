@@ -26,7 +26,7 @@ export const createPost = async (req: Request, res: Response) => {
 export const getAllPosts = async (req: Request, res: Response) => {
   try {
     // 1. Отримуємо параметри з URL (наприклад: /posts?page=2&limit=20&category=news)
-    const { page, limit, category } = req.query;
+    const { page, limit, category, lang } = req.query;
 
     // Налаштування значень за замовчуванням, якщо фронтенд нічого не передав
     const currentPage = Number(page) || 1;
@@ -37,6 +37,10 @@ export const getAllPosts = async (req: Request, res: Response) => {
     const filter: any = {};
     if (category) {
         filter.category = category;
+    }
+
+    if (lang) {
+        filter['originalData.lang'] = lang;
     }
 
     // 3. Рахуємо, скільки постів треба пропустити (skip)
