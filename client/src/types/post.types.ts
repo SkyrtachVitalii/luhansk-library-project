@@ -4,7 +4,7 @@ export interface IPost {
   shortDescription: string; // <-- Додали
   content: string;
   imageUrl?: string;
-  category: 'news' | 'event' | 'announcement' | 'recommends';
+  category?: 'news' | 'event' | 'announcement' | 'recommends';
   viewsCount: number;
   tags?: string[];
   author: string;

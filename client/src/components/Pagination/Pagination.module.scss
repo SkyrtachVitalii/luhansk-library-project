@@ -1,0 +1,108 @@
+// client/src/components/Pagination/Pagination.module.scss
+
+$theme-red: #a80000; // Темно-червоний колір як на скріншоті
+$text-gray: #999;
+$border-color: #ddd;
+
+.paginationContainer {
+  // 1. Змінюємо inline-flex на flex (тепер це блочний елемент)
+  display: flex; 
+  
+  // 2. Вказуємо ширину "під контент", щоб рамка облягала кнопки, а не розтягувалась на весь екран
+  width: fit-content;
+  list-style: none;
+  border: 1px solid $border-color;
+  border-radius: 4px; // Легке заокруглення країв всього блоку
+  overflow: hidden;   // Щоб кути кнопок не вилазили за заокруглення
+  margin: 40px auto;  // Центрування
+  background-color: #fff;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05); // Легка тінь для об'єму
+}
+
+.pageBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  // Розміри та відступи
+  padding: 10px 16px;
+  min-width: 45px; // Мінімальна ширина для цифр
+  height: 42px;
+  
+  // Типографіка
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  color: $text-gray;
+  line-height: 1.2;
+  
+  background-color: #fff;
+  border: none;
+  border-right: 1px solid $border-color; // Розділювач справа
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  outline: none;
+
+  // Прибираємо розділювач у останньої кнопки
+  &:last-child {
+    border-right: none;
+  }
+
+  // Ховер ефект (якщо кнопка не активна і не вимкнена)
+  &:hover:not(:disabled):not(.active) {
+    background-color: #f7f7f7;
+    color: $theme-red; // При наведенні текст стає червоним
+  }
+
+  // Стан Disabled (коли не можна натиснути)
+  &:disabled {
+    color: #ccc;
+    cursor: default;
+    background-color: #fff;
+  }
+
+  // АКТИВНА СТОРІНКА (Червоний фон)
+  &.active {
+    background-color: $theme-red;
+    color: #fff;
+    border-color: $theme-red;
+    cursor: default;
+  }
+}
+
+.dots {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 10px;
+  color: $text-gray;
+  border-right: 1px solid $border-color;
+  font-size: 14px;
+}
+
+// Адаптив для мобільних
+@media (max-width: 768px) {
+  .paginationContainer {
+    width: 100%;
+    justify-content: center;
+    border: none; // На мобільних можна прибрати рамку
+    box-shadow: none;
+  }
+  
+  .pageBtn {
+    padding: 8px 12px;
+    font-size: 12px;
+    height: 36px;
+    min-width: 36px;
+    border: 1px solid $border-color; // Повертаємо рамки кожній кнопці окремо
+    margin: 0 2px;
+    border-radius: 4px;
+    
+    // На мобільних ховаємо слова "Попередня/Наступна", лишаємо іконки або скорочення, 
+    // але це треба робити в TSX. Тут просто зменшуємо розмір.
+  }
+  
+  .dots {
+    border: none;
+  }
+}

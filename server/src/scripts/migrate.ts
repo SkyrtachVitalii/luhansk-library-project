@@ -1,210 +1,214 @@
-import mongoose from "mongoose";
-import dotenv from "dotenv";
-import fs from "fs";
-import path from "path";
-import { v2 as cloudinary } from "cloudinary";
-// Переконайтесь, що шлях до моделі правильний
-import Post from "../models/Post";
+import mongoose from 'mongoose';
+import dotenv from 'dotenv';
+import fs from 'fs';
+import path from 'path';
+import { v2 as cloudinary } from 'cloudinary';
+import Post from '../models/Post';
 
-// Підключаємо змінні оточення (.env)
-dotenv.config({ path: path.join(__dirname, "../../.env") });
+// --- НАЛАШТУВАННЯ ---
+dotenv.config({ path: path.join(__dirname, '../../.env') });
 
-// Налаштування хмари
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-const MONGO_URI = process.env.MONGO_URI || "";
+const MONGO_URI = process.env.MONGO_URI || '';
+const CLOUDINARY_ROOT_FOLDER = 'library_archive_main'; 
+
+// Шляхи
+const MIGRATION_DIR = path.join(__dirname, '../../../migration');
+const UPLOAD_DIR = path.join(MIGRATION_DIR, 'upload');     
+const JSON_FILE = path.join(MIGRATION_DIR, 'posts.json');  
+
+// Глобальна карта посилань
+const GLOBAL_FILE_MAP = new Map<string, string>();
+
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
-// Функція "витягування" першої картинки з HTML тексту
-const extractImageSrc = (htmlString: string): string | null => {
-  if (!htmlString) return null;
-  // Шукаємо src="..." або src='...'
-  const match = htmlString.match(/src=["']([^"']+)["']/);
-  return match ? match[1] : null;
+// --- ДОПОМІЖНІ ФУНКЦІЇ ---
+
+const getAllFiles = (dirPath: string, arrayOfFiles: string[] = []) => {
+  if (!fs.existsSync(dirPath)) return arrayOfFiles;
+  const files = fs.readdirSync(dirPath);
+
+  files.forEach((file) => {
+    const fullPath = path.join(dirPath, file);
+    if (fs.statSync(fullPath).isDirectory()) {
+      getAllFiles(fullPath, arrayOfFiles);
+    } else {
+      if (file !== '.DS_Store' && file !== 'Thumbs.db') {
+        arrayOfFiles.push(fullPath);
+      }
+    }
+  });
+  return arrayOfFiles;
 };
 
-const migrateData = async () => {
-  try {
-    // 1. Підключення до БД
-    if (!MONGO_URI) throw new Error("MONGO_URI is missing");
-    await mongoose.connect(MONGO_URI);
-    console.log("✅ Connected to MongoDB");
+// --- ЕТАП 1: Завантаження файлів ---
+const uploadAllLocalFiles = async () => {
+  console.log('\n📦 ЕТАП 1: Завантаження файлів у Cloudinary...');
+  
+  if (!fs.existsSync(UPLOAD_DIR)) {
+    console.error(`❌ Папку не знайдено: ${UPLOAD_DIR}`);
+    return;
+  }
 
-    // 2. Визначаємо шляхи
-    // Папка migration (корінь для файлів)
-    const migrationRoot = path.join(__dirname, "../../../migration");
-    const jsonPath = path.join(migrationRoot, "posts.json");
+  const allFiles = getAllFiles(UPLOAD_DIR);
+  console.log(`🔍 Всього файлів на диску: ${allFiles.length}`);
 
-    if (!fs.existsSync(jsonPath)) {
-      throw new Error(`❌ File not found: ${jsonPath}`);
-    }
+  for (const [index, filePath] of allFiles.entries()) {
+    const relativePath = path.relative(MIGRATION_DIR, filePath).replace(/\\/g, '/');
+    const fileDir = path.dirname(relativePath);
+    const cloudinaryFolder = path.join(CLOUDINARY_ROOT_FOLDER, fileDir).replace(/\\/g, '/');
 
-    // 3. Читаємо дані
-    const rawData = fs.readFileSync(jsonPath, "utf-8");
-    const parsedData = JSON.parse(rawData);
+    try {
+      const stats = fs.statSync(filePath);
+      const fileSizeInBytes = stats.size;
+      const fileSizeInMB = fileSizeInBytes / (1024 * 1024);
+      
+      // --- ВИПРАВЛЕННЯ ТУТ: явно вказуємо any ---
+      let result: any; 
 
-    // --- ВИПРАВЛЕНА ЛОГІКА ---
-    let postsArray = [];
-
-    if (Array.isArray(parsedData)) {
-      // Шукаємо елемент, який містить реальні дані (type: 'table')
-      const tableItem = parsedData.find(
-        (item: any) => item.type === "table" && item.data
-      );
-
-      if (tableItem) {
-        console.log(
-          "📦 Знайдено структуру phpMyAdmin. Витягуємо дані з таблиці..."
-        );
-        postsArray = tableItem.data;
+      // Якщо файл більший за 9.5 МБ
+      if (fileSizeInBytes > 9500000) {
+           console.log(`   ⚠️ Великий файл (${fileSizeInMB.toFixed(2)} MB): ${relativePath}. Вантажимо частинами...`);
+           
+           result = await cloudinary.uploader.upload_large(filePath, {
+            folder: cloudinaryFolder,
+            use_filename: true,
+            unique_filename: false,
+            overwrite: false,
+            resource_type: "auto",
+            chunk_size: 6000000 
+          });
       } else {
-        // Якщо це не phpMyAdmin формат, а просто список новин
-        postsArray = parsedData;
+          // Звичайне завантаження
+          result = await cloudinary.uploader.upload(filePath, {
+            folder: cloudinaryFolder,
+            use_filename: true,
+            unique_filename: false,
+            overwrite: false, 
+            resource_type: "auto"
+          });
       }
-    } else {
-      // Якщо це об'єкт { data: [...] }
-      postsArray = parsedData.data || parsedData.posts || [];
+
+      // Зберігаємо посилання
+      const key = '/' + relativePath; 
+      
+      // Перевіряємо, чи є secure_url (хоча для any це не обов'язково, але безпечніше)
+      if (result && result.secure_url) {
+        GLOBAL_FILE_MAP.set(key, result.secure_url);
+      }
+
+      if ((index + 1) % 50 === 0) console.log(`   📤 [${index + 1}/${allFiles.length}] Оброблено...`);
+      
+    } catch (error: any) {
+      console.error(`   ❌ Помилка завантаження ${relativePath}:`, error.message);
     }
-    // -------------------------
+    
+    await delay(50); 
+  }
+  console.log(`✅ Всі файли оброблено. Карта посилань готова (${GLOBAL_FILE_MAP.size} записів).\n`);
+};
 
-    console.log(
-      `🚀 Знайдено ${postsArray.length} записів. Починаємо міграцію...`
-    );
+// --- ЕТАП 2: Міграція БД ---
+const migrateDatabase = async () => {
+  console.log('📝 ЕТАП 2: Міграція постів у MongoDB...');
 
-    // 4. Запускаємо цикл
-    for (const [index, item] of postsArray.entries()) {
-      let cloudImageUrl = "";
+  if (!fs.existsSync(JSON_FILE)) throw new Error(`❌ File not found: ${JSON_FILE}`);
+  
+  const rawData = fs.readFileSync(JSON_FILE, 'utf-8');
+  const parsedData = JSON.parse(rawData);
+  
+  let postsArray = [];
+  if (Array.isArray(parsedData)) {
+      const tableItem = parsedData.find((item: any) => item.type === 'table' && item.data);
+      postsArray = tableItem ? tableItem.data : parsedData;
+  } else {
+      postsArray = parsedData.data || [];
+  }
 
-      // Логіка пошуку картинки:
-      // Спочатку шукаємо в "short" (короткий опис), якщо ні - в "full_text" (розкодований BLOB)
-      let relativePath =
-        extractImageSrc(item.short) || extractImageSrc(item.full_text);
+  console.log(`🧹 Очищення бази даних...`);
+  await Post.deleteMany({}); 
+  console.log(`✅ Колекцію очищено.`);
+  
+  console.log(`🚀 Починаємо імпорт ${postsArray.length} постів...`);
 
-      if (relativePath) {
-        // У базі шлях виглядає як "/upload/images/..."
-        // Нам треба прибрати перший слеш, щоб шлях став "upload/images/..."
-        if (relativePath.startsWith("/")) {
-          relativePath = relativePath.slice(1);
-        }
+  for (const [index, item] of postsArray.entries()) {
+    
+    let title = item.capt || item.title || 'Без назви';
+    let fullContent = item.content || '';
+    let shortDesc = item.short || '';
+    let menuCategory = item.menu || 'other';
+    let oldId = item.id ? Number(item.id) : 0;
+    
+    const replaceLinks = (text: string): string => {
+        if (!text) return '';
+        const regex = /(\/upload\/[a-zA-Z0-9_\-./]+)/gi;
+        return text.replace(regex, (match) => {
+            if (GLOBAL_FILE_MAP.has(match)) {
+                return GLOBAL_FILE_MAP.get(match)!;
+            }
+            return match; 
+        });
+    };
 
-        // Повний шлях на вашому ПК: migration/upload/images/...
-        const localFilePath = path.join(migrationRoot, relativePath);
+    const processedShort = replaceLinks(shortDesc);
+    const processedContent = replaceLinks(fullContent);
 
-        // Перевіряємо, чи файл існує на диску
-        if (fs.existsSync(localFilePath)) {
-          try {
-            // Завантажуємо в Cloudinary
-            const uploadRes = await cloudinary.uploader.upload(localFilePath, {
-              folder: "library_archive",
-              use_filename: true,
-              unique_filename: false,
-              overwrite: false,
-              transformation: [
-                { width: 1000, crop: "limit" }, // Оптимізація розміру
-                { quality: "auto" }, // Оптимізація якості
-                { fetch_format: "auto" }, // Оптимізація формату (webp)
-              ],
-            });
-            cloudImageUrl = uploadRes.secure_url;
-            console.log(
-              `   📸 [${index + 1}] Image uploaded: ${cloudImageUrl}`
-            );
-          } catch (err) {
-            console.error(`   ⚠️ Cloudinary upload failed: ${relativePath}`);
-          }
-        } else {
-          // Часто буває, що в базі посилання є, а файлу вже давно немає - це ок
-          // console.warn(`   ⚠️ Local file missing: ${relativePath}`);
-        }
-      }
+    const extractCloudinaryUrl = (html: string) => {
+        const match = html.match(/src=["'](https:\/\/res\.cloudinary\.com[^"']+)["']/);
+        return match ? match[1] : '';
+    };
+    let mainImageUrl = extractCloudinaryUrl(processedShort) || extractCloudinaryUrl(processedContent) || '';
 
-      // Створення поста в MongoDB
-      // Використовуємо поля з вашого SQL запиту: item.title, item.full_text
-      // 1. Формуємо контент.
-      // Пробуємо всі можливі варіанти полів зі старої бази.
-      let contentData =
-        item.full_text || item.short || item.body || item.content || "";
+    let finalContent = processedContent;
+    if (!finalContent && processedShort) finalContent = processedShort;
+    if (!finalContent) finalContent = '<p>Архівний вміст.</p>';
 
-      // 2. Очищаємо контент від зайвих пробілів
-      if (typeof contentData === "string") {
-        contentData = contentData.trim();
-      }
+    const newPost = new Post({
+      title: title,
+      shortDescription: processedShort,
+      content: finalContent,
+      imageUrl: mainImageUrl,
+      category: menuCategory,
+      viewsCount: item.views ? Number(item.views) : 0,
+      createdAt: item.created_at ? new Date(item.created_at) : new Date(),
+      updatedAt: new Date(),
+      author: 'Archive',
+      tags: ['archive', menuCategory],
+      oldId: oldId,
+      originalData: item          
+    });
 
-      // 3. Якщо контенту все одно немає — ставимо заглушку, щоб база не лаялась
-      if (!contentData || contentData === "") {
-        console.warn(
-          `   ⚠️ Увага: У поста "${item.title}" немає тексту. Додаю заглушку.`
-        );
-        contentData = "<p>Деталі новини відсутні або знаходяться в архіві.</p>";
-      }
-
-      // 1. Короткий опис беремо з item.short
-      let shortDesc = item.short || '';
-      
-      // 2. Повний текст беремо з item.full_text (або item.body)
-      let fullContent = item.full_text || item.body || item.content || '';
-
-      // Якщо повного тексту немає, а є тільки короткий - дублюємо короткий в повний
-      if (!fullContent && shortDesc) {
-          fullContent = shortDesc;
-      }
-      
-      // Заглушка, якщо зовсім пусто
-      if (!fullContent) fullContent = '<p>Деталі в архіві.</p>';
-
-      let postCategory = 'news';
-      if (item.menu === 'recommends') {
-          postCategory = 'recommends';
-      }
-
-      const newPost = new Post({
-        title: item.title || 'Новина без назви',
-        shortDescription: shortDesc,
-        content: fullContent,
-        imageUrl: cloudImageUrl,
-        
-        category: postCategory, // <-- ТУТ ТЕПЕР ДИНАМІЧНА КАТЕГОРІЯ
-        
-        viewsCount: 0,
-        createdAt: item.created_at ? new Date(item.created_at) : new Date(),
-        updatedAt: new Date(),
-        author: 'Archive',
-        tags: ['архів']
-      });
-
-      // Додаємо try/catch безпосередньо для збереження, щоб один поганий пост не зупиняв весь процес
-      try {
+    try {
         await newPost.save();
-      } catch (saveError) {
-        console.error(
-          `   ❌ Не вдалося зберегти пост "${item.title}":`,
-          saveError
-        );
-        // continue дозволяє циклу йти далі до наступного поста
-        continue;
-      }
-
-      // Виводимо прогрес кожні 10 постів, щоб не спамити
-      if ((index + 1) % 10 === 0) {
-        console.log(
-          `   Processed ${index + 1} / ${postsArray.length} posts...`
-        );
-      }
-
-      // Маленька пауза, щоб не перевантажити мережу
-      await delay(200);
+    } catch (e) {
+        console.error(`   ❌ DB Error (${title}):`, e);
     }
 
-    console.log("🎉 Migration Completed Successfully!");
-    process.exit(0);
-  } catch (error) {
-    console.error("❌ Migration Failed:", error);
-    process.exit(1);
+    if ((index + 1) % 50 === 0) console.log(`   ⏳ Оброблено: ${index + 1}`);
   }
 };
 
-migrateData();
+// --- ЗАПУСК ---
+const start = async () => {
+    try {
+        if (!MONGO_URI) throw new Error('MONGO_URI is missing');
+        await mongoose.connect(MONGO_URI);
+        console.log('✅ Connected to MongoDB');
+
+        await uploadAllLocalFiles();
+        await migrateDatabase();
+
+        console.log('🎉 МІГРАЦІЯ ЗАВЕРШЕНА УСПІШНО!');
+        process.exit(0);
+    } catch (error) {
+        console.error('❌ Fatal Error:', error);
+        process.exit(1);
+    }
+};
+
+start();

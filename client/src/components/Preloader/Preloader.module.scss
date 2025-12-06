@@ -1,0 +1,60 @@
+// client/src/components/Preloader/Preloader.module.scss
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  z-index: 50;
+  background-color: #fff; // Або прозорий, залежить від контексту
+}
+
+// Модифікатор для повного екрану (глобальне завантаження)
+.fullScreen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+}
+
+// Модифікатор для локального використання (всередині блоку)
+.local {
+  min-height: 800px; // Мінімальна висота, щоб блок не "стрибав"
+  height: 100%;
+}
+
+.pulsingLogo {
+  position: relative;
+  width: 120px; // Налаштуйте розмір логотипу
+  height: 120px;
+  
+  // Головна магія анімації
+  animation: pulse 2s infinite ease-in-out;
+  
+  img {
+    object-fit: contain;
+    width: 100%;
+    height: 100%;
+  }
+}
+
+// Визначення анімації
+@keyframes pulse {
+  0% {
+    transform: scale(0.95);
+    opacity: 0.8;
+    filter: drop-shadow(0 0 0 rgba(168, 0, 0, 0));
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 1;
+    // Легке світіння вашим червоним кольором
+    filter: drop-shadow(0 0 15px rgba(168, 0, 0, 0.4));
+  }
+  100% {
+    transform: scale(0.95);
+    opacity: 0.8;
+    filter: drop-shadow(0 0 0 rgba(168, 0, 0, 0));
+  }
+}

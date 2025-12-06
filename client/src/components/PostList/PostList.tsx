@@ -4,35 +4,31 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { useGetPostsQuery } from "@/lib/redux/services/postsApi";
 import { IPost } from "@/types";
 import styles from "./PostList.module.scss";
 
-export default function PostList() {
-  const { data: posts, error, isLoading } = useGetPostsQuery();
+// 1. Описуємо, що компонент очікує отримати ззовні
+interface PostListProps {
+  posts: IPost[];
+}
 
-  if (isLoading)
-    return (
-      <div className="text-center p-8 text-gray-500">Завантаження новин...</div>
-    );
-  if (error)
-    return (
-      <div className="text-center p-8 text-red-500">
-        Помилка завантаження даних.
-      </div>
-    );
-
+// 2. Деструктуризуємо posts з пропсів
+export default function PostList({ posts }: PostListProps) {
+  
+  // Перевірка на пустий масив
   if (!posts || posts.length === 0) {
     return (
-      <div className="text-center p-8 text-gray-500">Новин поки немає.</div>
+      <div className="text-center p-8 text-gray-500">
+        Список постів порожній.
+      </div>
     );
   }
 
   return (
     <div className={styles.postsContainer}>
       {posts.map((post: IPost) => {
-        // Перевіряємо, чи це архівний пост (по тегу, який ми додали при міграції)
-        const isArchived = post.tags?.includes("архів");
+        // Перевіряємо, чи це архівний пост
+        const isArchived = post.tags?.includes("archive");
 
         return (
           <article key={post._id} className={styles.postItem}>
@@ -45,7 +41,7 @@ export default function PostList() {
               </span>
             </header>
 
-            {/* Блок картинки (однаковий для всіх) */}
+            {/* Блок картинки */}
             {post.imageUrl ? (
               <div className={styles.postImageContainer}>
                 <Image
@@ -53,11 +49,11 @@ export default function PostList() {
                   alt={post.title}
                   fill
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 75vw, 800px"
-                  priority={posts.indexOf(post) === 0}
+                  // priority можна вираховувати, якщо передавати index, але поки приберемо або залишимо false
+                  priority={false} 
                 />
               </div>
             ) : (
-              // Якщо хочете, можна прибрати блок else, щоб не показувати сірий квадрат
               <div
                 className={`${styles.postImageContainer} flex items-center justify-center text-gray-400 bg-gray-100`}
               >
@@ -65,15 +61,13 @@ export default function PostList() {
               </div>
             )}
 
-            {/* --- ЛОГІКА РЕНДЕРИНГУ КОНТЕНТУ --- */}
+            {/* Контент */}
             {isArchived ? (
-              // Для архівних: рендеримо HTML з shortDescription
               <div
                 className={`${styles.postContent} ${styles.archivedContent}`}
                 dangerouslySetInnerHTML={{ __html: post.shortDescription }}
               />
             ) : (
-              // Для нових: рендеримо shortDescription як текст (або content, якщо short немає)
               <div className={styles.postContent}>
                 {post.shortDescription || post.content}
               </div>
