@@ -35,7 +35,7 @@ const NewsPage = () => {
       <div className={`container ${styles.pageContainer}`}>
         <div className={styles.layoutGrid}>
           
-          <main className={styles.contentColumn}>
+          <div className={styles.contentColumn}>
             {/* isFetching тут залишаємо для ефекту прозорості при пагінації */}
             <div style={{ opacity: isFetching ? 0.6 : 1, transition: 'opacity 0.2s' }}>
               <PostList posts={posts} />
@@ -52,7 +52,7 @@ const NewsPage = () => {
             {posts.length === 0 && (
               <p className="text-center py-10">Новин поки немає.</p>
             )}
-          </main>
+          </div>
 
           <aside className={styles.sidebarColumn}>
             <div className={styles.stickyWidget}>

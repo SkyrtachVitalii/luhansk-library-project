@@ -1,30 +1,22 @@
-// client/src/components/Preloader/Preloader.tsx
 "use client";
 
 import React, { useState, useEffect } from 'react';
+import {MIN_PRELOADER_TIME} from '@/config/constants';
 import Image from 'next/image';
 import styles from './Preloader.module.scss';
-
-interface PreloaderProps {
-  isLoading?: boolean;       // Стан завантаження даних
-  minDisplayTime?: number;   // Мінімальний час показу (за замовчуванням 2000мс)
-  type?: 'full' | 'local';   // Тип
-  className?: string;
-  children?: React.ReactNode; // Контент сторінки
-}
+import { PreloaderProps } from "@/types";
 
 const Preloader: React.FC<PreloaderProps> = ({ 
   isLoading = true, 
-  minDisplayTime = 2000, 
+  minDisplayTime = MIN_PRELOADER_TIME, 
   type = 'local', 
   className = '',
   children
 }) => {
-  // Стан: чи пройшов мінімальний час?
+  // 1. Стейт таймера
   const [isMinTimeElapsed, setIsMinTimeElapsed] = useState(false);
 
   useEffect(() => {
-    // Запускаємо таймер при монтуванні компонента
     const timer = setTimeout(() => {
       setIsMinTimeElapsed(true);
     }, minDisplayTime);
@@ -32,11 +24,40 @@ const Preloader: React.FC<PreloaderProps> = ({
     return () => clearTimeout(timer);
   }, [minDisplayTime]);
 
-  // Головна умова: показуємо лоадер, якщо (Дані вантажаться) АБО (Час не вийшов)
-  const shouldShowPreloader = isLoading || !isMinTimeElapsed;
+  // 2. Визначаємо, чи готовий контент до показу
+  // Контент готовий, коли дані завантажились І пройшов мінімальний час анімації
+  const isContentReady = !isLoading && isMinTimeElapsed;
 
-  // Якщо треба показувати прелоадер
-  if (shouldShowPreloader) {
+  // 3. === ГЛОБАЛЬНА ЛОГІКА СКРОЛУ ===
+  useEffect(() => {
+    // Спрацьовує тільки тоді, коли контент нарешті з'явився
+    if (isContentReady) {
+      const hash = window.location.hash;
+      
+      if (hash) {
+        // Робимо мікро-затримку (100мс), щоб React встиг "намалювати" HTML у DOM
+        // після того, як ми прибрали прелоадер
+        setTimeout(() => {
+          try {
+            // Декодуємо хеш (на випадок кирилиці в URL) і прибираємо #
+            const id = decodeURIComponent(hash.replace('#', ''));
+            const element = document.getElementById(id);
+
+            if (element) {
+              element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+          } catch (e) {
+            console.error("Помилка скролу:", e);
+          }
+        }, 100);
+      }
+    }
+  }, [isContentReady]); // Залежність: запускати, коли контент стає готовим
+
+  
+  // 4. Логіка рендеру
+  // Поки контент НЕ готовий — показуємо Логотип
+  if (!isContentReady) {
     const containerClass = `${styles.container} ${
       type === 'full' ? styles.fullScreen : styles.local
     } ${className}`;
@@ -56,7 +77,7 @@ const Preloader: React.FC<PreloaderProps> = ({
     );
   }
 
-  // Якщо завантаження завершено і час вийшов — показуємо контент
+  // Коли готовий — показуємо дітей
   return <>{children}</>;
 };
 

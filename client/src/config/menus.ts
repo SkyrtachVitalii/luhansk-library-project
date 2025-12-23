@@ -1,3 +1,4 @@
+// client/src/config/menus.ts
 import { MenuItem, SocialLink, SocialHelp } from "../types";
 
 // Масив пунктів меню для хедера
@@ -10,7 +11,7 @@ export const headerMenuItems: MenuItem[] = [
   { name: "Проєкти", href: "/projects", id: "projects" },
   { name: "Стати читачем", href: "/be-reader", id: "be-reader" },
   { name: "Електронний каталог", href: "/e-catalog", id: "e-catalog" },
-  { name: "Бібліотекарю", href: "/bibliotekaru", id: "bibliotekaru" },
+  { name: "Бібліотекарю", href: "/profcas", id: "bibliotekaru" },
   { name: "Адмінка", href: "/admin", id: "admin" },
 ];
 
@@ -94,7 +95,7 @@ export const footerMenuItemsColumn1: MenuItem[] = [
   { name: "Послуги", href: "/services", id: "services" },
   { name: "Стати читачем", href: "/be-reader", id: "be-reader" },
   { name: "Електронний каталог", href: "/e-catalog", id: "e-catalog" },
-  { name: "Бібліотекарю", href: "/bibliotekaru", id: "bibliotekaru" },
+  { name: "Бібліотекарю", href: "/profcas", id: "bibliotekaru" },
 ];
 
 // Масив пунктів меню для футера, другий стовпець
@@ -115,4 +116,46 @@ export const footerMenuItemsColumn3: MenuItem[] = [
   { name: "Безперервна освіта", href: "/nonstopleaning", id: "nonstopleaning" },
   { name: "Аналітика", href: "/analitics", id: "analitics" },
   { name: "Луганське відділення УБА", href: "/lula", id: "lula" },
+];
+
+
+// 1. Меню "Про бібліотеку" (зі скріншотів Історія, Контакти)
+export const aboutSidebarMenu: MenuItem[] = [
+  { name: "Про бібліотеку", href: "/about", id: "about" },
+  { name: "Історія", href: "/history", id: "history" },
+  { name: "Партнери", href: "/partners", id: "partners" },
+  { name: "Проєкти", href: "/projects", id: "projects" },
+  { name: "Тренінговий центр", href: "/trains", id: "trains" }, // Припустив посилання
+  { name: "Видання", href: "/publications", id: "publications" },
+  { name: "Плани та звіти", href: "/reports", id: "reports" },
+  { name: "Статистика", href: "/reports#stat", id: "statistics" },
+  { name: "Контакти", href: "/contacts", id: "contacts" },
+];
+
+// 2. Меню "Бібліотекарю" (зі скріншоту Бібліотеки Луганщини)
+export const librarianSidebarMenu: MenuItem[] = [
+  { name: "Бібліотекарю", href: "/profcas", id: "bibliotekaru" },
+  { name: "Бібліотеки Луганщини", href: "/luglibs", id: "luglibs" },
+  { name: "Методична допомога", href: "/methods", id: "methods" },
+  { name: "Законодавство", href: "/laws", id: "laws" },
+  { name: "Безперервна освіта", href: "/nonstopleaning", id: "nonstopleaning" },
+  { name: "Аналітичні матеріали", href: "/analitics", id: "analitics" },
+  { name: "Луганське відділення УБА", href: "/lula", id: "lula" },
+];
+
+// 3. Меню "Луганське відділення УБА" (зі скріншоту LULA)
+export const lulaSidebarMenu: MenuItem[] = [
+  { name: "Луганське відділення УБА", href: "/lula", id: "lula_main" },
+  { name: "Конкурси", href: "/lula#konkursy2017", id: "lula_contests" },
+  { name: "Регіональні проєкти", href: "/lula#regproj", id: "lula_reg_projects" },
+  { name: "Всеукраїнські акції", href: "/lula#pressato", id: "lula_actions" },
+  { name: "Контакти та членство", href: "/lula#contacts", id: "lula_membership" },
+];
+
+// Масив пунктів меню для сторінки Проєкти
+export const projectsMenuItems: MenuItem[] = [
+  { name: "Проєкти", href: "/projects", id: "projects" },
+  { name: "Мандрівна бібліотека", href: "https://nomlib.library.lg.ua/", id: "partners" },
+  { name: "Сьогодненні проєкти", href: "/projects#proj_now", id: "now_projects" },
+  { name: "Реалізовані проєкти", href: "/projects#proj_end", id: "realized_projects" },
 ];

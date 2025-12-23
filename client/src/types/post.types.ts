@@ -10,4 +10,5 @@ export interface IPost {
   author: string;
   createdAt: string; // JSON повертає дату як рядок
   updatedAt: string;
+  oldId: number;
 }

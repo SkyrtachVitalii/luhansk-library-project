@@ -16,6 +16,7 @@ export interface GetPostsArgs {
   limit?: number;
   category?: string;
   lang?: string; // <--- Додали нове поле
+  oldId?: number;
 }
 
 export const postsApi = createApi({
@@ -29,7 +30,7 @@ export const postsApi = createApi({
     getPosts: builder.query<PostsResponse, GetPostsArgs | void>({
       query: (args) => {
         // Якщо аргументів немає (void), використовуємо порожній об'єкт
-        const { page = 1, limit = 7, category, lang } = args || {};
+        const { page = 1, limit = 7, category, lang, oldId } = args || {};
 
         return {
           url: 'posts',
@@ -39,6 +40,7 @@ export const postsApi = createApi({
             limit,
             category,
             lang, // <--- Передаємо параметр на сервер
+            oldId,
           },
         };
       },

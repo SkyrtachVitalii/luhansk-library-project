@@ -1,0 +1,107 @@
+.carouselWrapper {
+  position: relative;
+  width: 100%;
+  max-width: 1200px;
+  margin: 2rem auto; // Центруємо сам блок
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: #f0f0f0;
+  user-select: none; // Щоб текст не виділявся при швидкому кліку
+}
+
+.carouselWindow {
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+.track {
+  display: flex;
+  height: 100%;
+  // width задається інлайново в React компонені
+  will-change: transform; // Оптимізація для браузера
+}
+
+.slide {
+  // width задається інлайново в React компонені
+  height: auto;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.imageContainer {
+  position: relative;
+  width: 100%;
+  // Важливо: це задає пропорцію висоти слайдера. 
+  // 38.3% це приблизно 2.6:1. Якщо картинки квадратніші, збільш це число (напр. 56.25% для 16:9)
+  padding-bottom: 38.3%; 
+  background-color: #ddd;
+}
+
+.image {
+  object-fit: cover; // Або contain, якщо треба щоб все влізло без обрізки
+}
+
+// Кнопки
+.control {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 10%;
+  border: none;
+  font-size: 3rem;
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.5;
+  transition: opacity 0.3s;
+  z-index: 10;
+  background: transparent; // Fallback
+  
+  &:hover {
+    opacity: 1;
+  }
+}
+
+.left {
+  left: 0;
+  background: linear-gradient(to right, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0) 100%);
+}
+
+.right {
+  right: 0;
+  background: linear-gradient(to left, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0) 100%);
+}
+
+// Індикатори
+.indicators {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
+  z-index: 15;
+}
+
+.dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 1px solid #fff;
+  background-color: rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  padding: 0;
+  transition: all 0.3s;
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.5);
+  }
+
+  &.active {
+    background-color: #fff;
+    transform: scale(1.2); // Трохи збільшуємо активну крапку
+  }
+}

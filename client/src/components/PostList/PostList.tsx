@@ -14,7 +14,6 @@ interface PostListProps {
 
 // 2. Деструктуризуємо posts з пропсів
 export default function PostList({ posts }: PostListProps) {
-  
   // Перевірка на пустий масив
   if (!posts || posts.length === 0) {
     return (
@@ -29,11 +28,14 @@ export default function PostList({ posts }: PostListProps) {
       {posts.map((post: IPost) => {
         // Перевіряємо, чи це архівний пост
         const isArchived = post.tags?.includes("archive");
-
+        const postUrl = `/article/${post.oldId}`;
         return (
-          <article key={post._id} className={styles.postItem}>
+          <article key={post.oldId} className={styles.postItem}>
             <header className={styles.postHeader}>
-              <Link href={`/posts/${post._id}`} className={styles.postTitle}>
+              <Link
+                href={postUrl}
+                className={styles.postTitle}
+              >
                 {post.title}
               </Link>
               <span className={styles.postDate}>
@@ -50,7 +52,7 @@ export default function PostList({ posts }: PostListProps) {
                   fill
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 75vw, 800px"
                   // priority можна вираховувати, якщо передавати index, але поки приберемо або залишимо false
-                  priority={false} 
+                  priority={false}
                 />
               </div>
             ) : (
@@ -76,7 +78,7 @@ export default function PostList({ posts }: PostListProps) {
             {/* Кнопка читати далі */}
             <div className={styles.readMoreContainer}>
               <Link
-                href={`/posts/${post._id}`}
+                href={postUrl}
                 className={styles.readMoreContainer__link}
               >
                 Читати далі →

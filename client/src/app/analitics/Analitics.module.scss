@@ -1,0 +1,32 @@
+.pageContainer {
+  padding: 40px 0;
+}
+
+.pageTitle {
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 30px;
+  color: #333;
+  text-align: center; // Або left, як вам більше подобається
+}
+
+.layoutGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 30px;
+
+  // На великих екранах розділяємо: 3 частини контент, 1 частина сайдбар
+  @media (min-width: 992px) {
+    grid-template-columns: 3fr 1fr;
+    align-items: start; // Щоб сайдбар не розтягувався на всю висоту
+  }
+}
+
+.contentColumn {
+  // Основна колонка з новинами
+}
+
+.sidebarColumn {
+  /* Стилі для правої колонки */
+  position: relative;
+}

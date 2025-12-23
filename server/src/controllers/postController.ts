@@ -69,3 +69,24 @@ export const getAllPosts = async (req: Request, res: Response) => {
     res.status(500).json({ message: 'Не вдалося отримати пости' });
   }
 };
+
+export const getOneOldPost = async (req: Request, res: Response) => {
+  try {
+    const searchId = Number(req.params.id);
+    if (isNaN(searchId)){
+      return res.status(400).json({message: "Invalid ID format"})
+    }
+
+    const post = await Post.findOne({ oldId: searchId });
+
+    if (!post) {
+      return res.status(404).json({ message: 'Пост не знайдено' });
+    }
+
+    res.json(post);
+    
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Не вдалося отримати пост' });
+  }
+};

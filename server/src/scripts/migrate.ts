@@ -1,3 +1,4 @@
+// server/src/scripts/migrate.ts
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import fs from 'fs';

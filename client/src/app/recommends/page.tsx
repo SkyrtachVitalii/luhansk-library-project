@@ -39,7 +39,7 @@ export default function RecommendsPage() {
       <div className={`container ${styles.pageContainer}`}>
         <div className={styles.layoutGrid}>
           {/* Ліва частина: Контент */}
-          <main className={styles.contentColumn}>
+          <div className={styles.contentColumn}>
             <div
               style={{
                 opacity: isFetching ? 0.6 : 1,
@@ -63,7 +63,7 @@ export default function RecommendsPage() {
                 У розділі &quot;Пропонуємо&quot; поки немає дописів.
               </p>
             )}
-          </main>
+          </div>
 
           {/* Права частина: Сайдбар */}
           <aside className={styles.sidebarColumn}>

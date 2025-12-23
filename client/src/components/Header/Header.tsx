@@ -6,10 +6,11 @@ import styles from "./Header.module.scss";
 import { useTheme } from "../../hooks/useTheme";
 import { useWindowWidth } from "../../hooks/useWindowWidth"; // Можна видалити, якщо більше ніде не юзається
 import { usePathname } from "next/navigation";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { headerMenuItems } from "../../config/menus";
 
 const Header = () => {
+  const headerRef = useRef<HTMLElement>(null);
   const { theme, toggleTheme } = useTheme();
   const [mobileMenuStatus, setMobileMenuStatus] = useState(false);
   const pathname = usePathname();
@@ -27,8 +28,29 @@ const Header = () => {
     }
   }, [windowWidth, breakpoint]);
 
+  useEffect(() => {
+    if (!headerRef.current) return;
+
+    const updateHeight = () => {
+      if (headerRef.current) {
+        const height = headerRef.current.offsetHeight;
+        // Записуємо змінну прямісінько в стиль кореневого елемента
+        document.documentElement.style.setProperty('--header-height', `${height}px`);
+      }
+    };
+
+    // 1. Вимірюємо одразу
+    updateHeight();
+
+    // 2. Слідкуємо за зміною розміру саме цього елемента
+    const observer = new ResizeObserver(updateHeight);
+    observer.observe(headerRef.current);
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <header className={styles.header}>
+    <header className={styles.header} ref={headerRef}>
       <div className="container container__header">
         <Link href="/" className={styles.brand}>
           <Image

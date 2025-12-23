@@ -1,0 +1,46 @@
+"use client";
+
+import React from 'react';
+import { useGetPostsQuery } from '@/lib/redux/services/postsApi';
+import Preloader from '@/components/Preloader/Preloader';
+import SafeHTML from '@/components/SafeHTML/SafeHTML'; // Використовуємо SafeHTML, якщо там є старі акордеони
+
+export default function Services() {
+  // 1. Запит до API
+  const { data, isLoading, error } = useGetPostsQuery({
+    category: 'services', // <--- Категорія з вашого запиту
+    lang: 'uk',
+    limit: 1,
+  });
+
+  // 2. Отримуємо перший знайдений пост
+  const post = data?.data?.[0];
+
+  if (error) {
+    return <div className="container py-10 text-center text-red-500">Помилка завантаження даних.</div>;
+  }
+
+  return (
+    <Preloader isLoading={isLoading} type="local">
+      <div className="container py-10">
+          <div className="layout-content content-body">
+            
+            {post ? (
+              <>
+                <SafeHTML html={post.content} />
+              </>
+            ) : (
+              // Стан, коли завантаження завершилось, але запису в базі немає
+              !isLoading && (
+                <div className="py-10 text-center text-gray-500">
+                  <h2>Сторінка оновлюється</h2>
+                </div>
+              )
+            )}
+
+          </div>
+
+      </div>
+    </Preloader>
+  );
+}
