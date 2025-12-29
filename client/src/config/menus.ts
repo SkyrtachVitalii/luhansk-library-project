@@ -12,7 +12,8 @@ export const headerMenuItems: MenuItem[] = [
   { name: "Стати читачем", href: "/be-reader", id: "be-reader" },
   { name: "Електронний каталог", href: "/e-catalog", id: "e-catalog" },
   { name: "Бібліотекарю", href: "/profcas", id: "bibliotekaru" },
-  { name: "Адмінка", href: "/admin", id: "admin" },
+  { name: "Увійти", href: "#login", id: "login" },
+  { name: "Вийти", href: "#logout", id: "logout" },
 ];
 
 // Масив пунктів для посилань на соціальні мережі

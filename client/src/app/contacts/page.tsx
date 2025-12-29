@@ -7,7 +7,7 @@ import { aboutSidebarMenu } from '@/config/menus'; // Використовуєм
 import SafeHTML from '@/components/SafeHTML/SafeHTML'; // Використовуємо SafeHTML, якщо там є старі акордеони
 
 
-export default function TrainingCenterPage() {
+export default function Contacts() {
     
   // 1. Запит до API
   const { data, isLoading, error } = useGetPostsQuery({

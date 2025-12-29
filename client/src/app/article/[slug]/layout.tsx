@@ -12,6 +12,8 @@ type Props = {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const post = await getPost(slug);
+  const siteUrl = process.env.PUBLIC_SITE_URL || "http://localhost:3000";
+  
 
   if (!post) {
     return { title: "Новина не знайдена" };
@@ -21,13 +23,40 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     ? post.content.replace(/<[^>]*>?/gm, "").slice(0, 150) + "..."
     : "Архівний запис бібліотеки";
 
+    const postImage = post.imageUrl || '/public/logo.png';
+
   return {
     title: `${post.title} | Архів бібліотеки`,
     description: cleanDescription,
+    metadataBase: new URL(siteUrl),
+    keywords: ['бібліотека', 'новини', 'архів', ...post.tags || []],
     openGraph: {
       title: post.title,
       description: cleanDescription,
-      images: post.imageUrl ? [post.imageUrl] : [],
+      url: `/article/${slug}`, // Посилання на цю конкретну сторінку
+      siteName: 'Моя Бібліотека',
+      images: [
+        {
+          url: postImage, 
+          width:200,
+          height: 200,
+          alt: post.title,
+        },
+      ],
+      locale: 'uk_UA',
+      type: 'article', // Тип контенту: стаття
+      publishedTime: post.createdAt, // Якщо є дата публікації
+    },
+    alternates: {
+      canonical: `/article/${slug}`,
+    },
+    robots: {
+      index: true, // Дозволити індексувати
+      follow: true, // Дозволити переходити по посиланнях
+      googleBot: {
+        index: true,
+        follow: true,
+      },
     },
   };
 }
@@ -35,9 +64,5 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 // === ОБГОРТКА (LAYOUT) ===
 export default function NewsLayout({ children }: Props) {
   // Тут ми просто створюємо контейнер для сторінки
-  return (
-    <div className="layout-content content-body">
-      {children}
-    </div>
-  );
+  return <div className="layout-content content-body">{children}</div>;
 }

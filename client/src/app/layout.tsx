@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 // import { Roboto } from "next/font/google";
 import "./globals.scss";
+import LoginModal from "@/components/Auth/LoginModal";
 import Header from "../components/Header/Header";
 import Footer from "../components/Footer/Footer";
 import ToTopBtn from "@/components/ToTopBtn/ToTopBtn";
@@ -40,6 +41,7 @@ export default function RootLayout({
             <ToTopBtn />
           </ThemeProvider>
         </StoreProvider>
+        <LoginModal />
       </body>
     </html>
   );
