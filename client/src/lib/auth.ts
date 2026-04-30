@@ -1,15 +1,9 @@
 // src/lib/auth.ts
 import { SignJWT, jwtVerify } from "jose";
 import { cookies } from "next/headers";
+import { SessionPayload } from "@/types/user.types";
 
 const SECRET_KEY = new TextEncoder().encode(process.env.JWT_SECRET || "change-me-to-super-secret-key");
-
-// 👇 ПРИБРАЛИ рядок з any. Тепер тут тільки конкретні поля.
-interface SessionPayload {
-  userId: string;
-  role: string;
-  name?: string; 
-}
 
 export async function createSession(payload: SessionPayload) {
   const token = await new SignJWT({ ...payload }) // Розгортаємо об'єкт, щоб TS був задоволений
@@ -28,7 +22,7 @@ export async function createSession(payload: SessionPayload) {
   });
 }
 
-export async function verifySession() {
+export async function verifySession(): Promise<SessionPayload | null> {
   const cookieStore = await cookies();
   const token = cookieStore.get("session_token")?.value;
 
@@ -36,8 +30,9 @@ export async function verifySession() {
 
   try {
     const { payload } = await jwtVerify(token, SECRET_KEY);
-    return payload;
+    return payload as unknown as SessionPayload;
   } catch (error) {
+    console.error("JWT verification failed:", error);
     return null;
   }
 }

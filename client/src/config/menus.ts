@@ -160,3 +160,19 @@ export const projectsMenuItems: MenuItem[] = [
   { name: "Сьогодненні проєкти", href: "/projects#proj_now", id: "now_projects" },
   { name: "Реалізовані проєкти", href: "/projects#proj_end", id: "realized_projects" },
 ];
+
+// Масив пунктів меню для сторінки Адміністатора
+export const adminMenuItems: MenuItem[] = [
+  { name: "Додати пост", href: "/admin/add-post", id: "add-post" },
+  { name: "Пости", href: "/admin/all-posts", id: "all-posts" },
+  { name: "Календар", href: "/admin/calendar", id: "calendar" },
+  { name: "Користувачі", href: "/admin/all-users", id: "all-users" },
+];
+
+// Масив пунктів меню для сторінки Менеджера
+export const managerMenuItems: MenuItem[] = [
+  { name: "Додати пост", href: "/admin/add-post", id: "add-post" },
+  { name: "Пости", href: "/admin/all-posts", id: "all-posts" },
+  { name: "Календар", href: "/admin/calendar", id: "calendar" },
+];
+

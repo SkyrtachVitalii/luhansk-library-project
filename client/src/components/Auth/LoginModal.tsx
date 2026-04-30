@@ -71,7 +71,13 @@ export default function LoginModal() {
       window.dispatchEvent(new Event("auth-change"));
 
       closeModal();
-      router.refresh();
+      const userRole = data.user.role;
+
+      if (userRole === "admin" || userRole === "manager"){
+        router.push("/admin");
+      }else {
+        router.push("/e-catalog");
+      }
     } catch (error) {
       setError("Помилка під час входу.");
     } finally {
