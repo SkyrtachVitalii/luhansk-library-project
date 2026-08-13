@@ -20,7 +20,7 @@ export default function AddNewUser({ onClose, onSuccess }: AddNewUserProps) {
     password: "", // Пароль обов'язковий при створенні
     role: "user",
     phone: "",
-    gender: "Чоловіча",
+    gender: "Male",
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -34,15 +34,20 @@ export default function AddNewUser({ onClose, onSuccess }: AddNewUserProps) {
     setIsLoading(true);
 
     try {
-      // Тут буде запит до твого API
-      // const res = await fetch('/api/auth/register', { ... });
-      
-      console.log("Відправка даних:", formData);
-      
-      // Імітація затримки
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+      const res = await fetch(`${apiUrl}/api/auth/register`, {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(formData)
+      });
 
-      // if (!res.ok) throw new Error("Помилка при створенні");
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.error || "Помилка при створенні");
+      }
 
       alert("Користувача створено успішно!");
       if (onSuccess) onSuccess(); // Оновлюємо таблицю
@@ -59,7 +64,7 @@ export default function AddNewUser({ onClose, onSuccess }: AddNewUserProps) {
     <div className={styles.overlay} onClick={onClose}>
       {/* stopPropagation щоб клік по модалці не закривав її */}
       <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
-        
+
         <div className={styles.header}>
           <h2>Новий користувач</h2>
           <button className={styles.closeBtn} onClick={onClose} title="Закрити">×</button>
@@ -69,7 +74,7 @@ export default function AddNewUser({ onClose, onSuccess }: AddNewUserProps) {
           {error && <div className={styles.errorMsg}>{error}</div>}
 
           <form id="addUserForm" onSubmit={handleSubmit} className={styles.formGrid}>
-            
+
             {/* Основна інформація */}
             <div className={styles.formGroup}>
               <label>Ім&apos;я *</label>
@@ -99,8 +104,8 @@ export default function AddNewUser({ onClose, onSuccess }: AddNewUserProps) {
             <div className={styles.formGroup}>
               <label>Стать</label>
               <select name="gender" value={formData.gender} onChange={handleChange}>
-                <option value="Чоловіча">Чоловіча</option>
-                <option value="Жіноча">Жіноча</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
               </select>
             </div>
 
@@ -120,10 +125,10 @@ export default function AddNewUser({ onClose, onSuccess }: AddNewUserProps) {
           <button type="button" className={styles.btnCancel} onClick={onClose}>
             Скасувати
           </button>
-          <button 
-            type="submit" 
+          <button
+            type="submit"
             form="addUserForm" // Прив'язка до форми через ID
-            className={styles.btnSubmit} 
+            className={styles.btnSubmit}
             disabled={isLoading}
           >
             {isLoading ? "Збереження..." : "Створити користувача"}

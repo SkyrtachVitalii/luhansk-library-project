@@ -3,7 +3,7 @@
 import styles from "./AdminAllUsers.module.scss";
 import Link from "next/link";
 import { useState } from "react";
-import {tableUserData} from "@/types/user.types";
+import { tableUserData } from "@/types";
 
 interface AdminAllUsersProps {
   users: tableUserData[];
@@ -15,10 +15,20 @@ export default function AdminAllUsers({ users, isSuperAdmin }: AdminAllUsersProp
   const handleDelete = async (id: string, name: string) => {
     if (!confirm(`Ви впевнені, що хочете видалити користувача "${name}"?`)) return;
     
-    // Тут буде логіка видалення
-    alert(`Delete user: ${id}`);
-    // await fetch(`/api/users/${id}`, { method: 'DELETE' });
-    // location.reload();
+    try {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+      const res = await fetch(`${apiUrl}/api/users/${id}`, { 
+        method: 'DELETE',
+        credentials: "include"
+      });
+      if (res.ok) {
+        window.location.reload();
+      } else {
+        alert("Помилка під час видалення");
+      }
+    } catch (err) {
+      alert("Помилка під час видалення");
+    }
   };
 
   return (

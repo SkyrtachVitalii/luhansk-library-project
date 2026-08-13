@@ -30,9 +30,7 @@ export default function Publications() {
         <div className="layout-grid">
           
           {/* ЛІВА КОЛОНКА: Меню */}
-          <aside className="layout-sidebar">
-            <AsideMenu items={aboutSidebarMenu} />
-          </aside>
+          <AsideMenu items={aboutSidebarMenu} />
 
           {/* ПРАВА КОЛОНКА: Контент */}
           {/* Клас content-body автоматично стилізує заголовки, списки та приховає старі col-lg-3 */}

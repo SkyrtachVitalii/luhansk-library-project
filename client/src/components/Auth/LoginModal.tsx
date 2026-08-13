@@ -47,10 +47,10 @@ export default function LoginModal() {
     setError(null);
 
     try {
-      console.log("Login data:", formData);
-
-      const res = await fetch("/api/auth/login", {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+      const res = await fetch(`${apiUrl}/api/auth/login`, {
         method: "POST",
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },
@@ -60,32 +60,40 @@ export default function LoginModal() {
         }),
       });
 
-      const data = await res.json();
-
-      if (!res.ok) {
-        throw new Error(data.error || "Login failed");
+      let data: Record<string, unknown> = {};
+      try {
+        data = (await res.json()) as Record<string, unknown>;
+      } catch {
+        // Якщо сервер повернув не-JSON відповідь (наприклад, 500 HTML)
       }
 
-      console.log("Login successful:", data);
+      if (!res.ok) {
+        throw new Error(
+          (typeof data.error === "string" && data.error) ||
+            (typeof data.message === "string" && data.message) ||
+            "Login failed"
+        );
+      }
 
       window.dispatchEvent(new Event("auth-change"));
 
       closeModal();
-      const userRole = data.user.role;
+      const user = data?.user as { role?: string } | undefined;
+      const userRole = user?.role;
 
-      if (userRole === "admin" || userRole === "manager"){
+      if (userRole === "admin" || userRole === "manager") {
         router.push("/admin");
-      }else {
+      } else {
         router.push("/e-catalog");
       }
-    } catch (error) {
-      setError("Помилка під час входу.");
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "Помилка під час входу.";
+      setError(message);
     } finally {
       setLoading(false);
     }
   };
 
-  // 🔥 ОСЬ ЦЕЙ РЯДОК ВИПРАВЛЯЄ ПРОБЛЕМУ 🔥
   // Якщо вікно закрите - ми просто нічого не малюємо
   if (!isOpen) return null;
 

@@ -33,36 +33,44 @@ export default function OldCarousel({ images }: OldCarouselProps) {
     
     const percentPerSlide = 100 / extendedImages.length;
     
-    gsap.to(trackRef.current, {
-      xPercent: -(percentPerSlide * index),
-      duration: duration,
-      ease: "power2.inOut",
-      onComplete: () => {
-        setIsAnimating(false);
-        
-        // Логіка Infinite Loop
-        if (index === extendedImages.length - 1) {
-          const realFirstIndex = 1;
-          setCurrentIndex(realFirstIndex);
-          gsap.set(trackRef.current, { xPercent: -(percentPerSlide * realFirstIndex) });
-        } else if (index === 0) {
-          const realLastIndex = extendedImages.length - 2;
-          setCurrentIndex(realLastIndex);
-          gsap.set(trackRef.current, { xPercent: -(percentPerSlide * realLastIndex) });
-        } else {
-          setCurrentIndex(index);
-        }
-      },
-    });
+    const ctx = gsap.context(() => {
+      gsap.to(trackRef.current, {
+        xPercent: -(percentPerSlide * index),
+        duration: duration,
+        ease: "power2.inOut",
+        onComplete: () => {
+          setIsAnimating(false);
+          
+          // Логіка Infinite Loop
+          if (index === extendedImages.length - 1) {
+            const realFirstIndex = 1;
+            setCurrentIndex(realFirstIndex);
+            gsap.set(trackRef.current, { xPercent: -(percentPerSlide * realFirstIndex) });
+          } else if (index === 0) {
+            const realLastIndex = extendedImages.length - 2;
+            setCurrentIndex(realLastIndex);
+            gsap.set(trackRef.current, { xPercent: -(percentPerSlide * realLastIndex) });
+          } else {
+            setCurrentIndex(index);
+          }
+        },
+      });
+    }, trackRef);
+
+    return () => ctx.revert();
   }, [extendedImages.length]);
 
-  // Ініціалізація позиції
+  // Ініціалізація позиції та очищення контексту GSAP
   useEffect(() => {
-    if (trackRef.current && extendedImages.length > 0) {
-      const percentPerSlide = 100 / extendedImages.length;
-      // Ставимо на 1-й слайд (реальний перший)
-      gsap.set(trackRef.current, { xPercent: -(percentPerSlide * 1) });
-    }
+    const ctx = gsap.context(() => {
+      if (trackRef.current && extendedImages.length > 0) {
+        const percentPerSlide = 100 / extendedImages.length;
+        // Ставимо на 1-й слайд (реальний перший)
+        gsap.set(trackRef.current, { xPercent: -(percentPerSlide * 1) });
+      }
+    }, trackRef);
+
+    return () => ctx.revert();
   }, [extendedImages.length]);
 
   // --- 2. ТЕПЕР МОЖНА РОБИТИ EARLY RETURN (Умови виходу) ---

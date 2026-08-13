@@ -1,4 +1,5 @@
 // src/components/Auth/LoginModal.module.scss
+@use "sass:color";
 
 // --- Змінні кольорів (можна винести в глобальні змінні) ---
 $primary-color: #2c3e50; // Темно-синій (бібліотечний)
@@ -169,7 +170,7 @@ $white: #ffffff;
     gap: 0.5rem;
 
     &:hover {
-      background-color: darken($accent-color, 10%);
+      background-color: color.adjust($accent-color, $lightness: -10%);
     }
 
     &:active {

@@ -31,9 +31,7 @@ export default function Contacts() {
         <div className="layout-grid">
           
           {/* ЛІВА КОЛОНКА: Меню */}
-          <aside className="layout-sidebar">
             <AsideMenu items={aboutSidebarMenu} />
-          </aside>
 
           {/* ПРАВА КОЛОНКА: Контент */}
           {/* Клас content-body автоматично стилізує заголовки, списки та приховає старі col-lg-3 */}

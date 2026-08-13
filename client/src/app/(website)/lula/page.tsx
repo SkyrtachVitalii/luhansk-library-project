@@ -22,9 +22,7 @@ export default function AboutPage() {
       <div className="container py-10">
         <div className="layout-grid">
           
-          <aside className="layout-sidebar">
-            <AsideMenu items={lulaSidebarMenu} />
-          </aside>
+          <AsideMenu items={lulaSidebarMenu} />
 
           <div className="layout-content content-body">
             {post ? (

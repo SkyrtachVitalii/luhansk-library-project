@@ -22,9 +22,7 @@ export default function ProfcasPage() {
       <div className="container py-10">
         <div className="layout-grid">
           
-          <aside className="layout-sidebar">
-            <AsideMenu items={librarianSidebarMenu} />
-          </aside>
+          <AsideMenu items={librarianSidebarMenu} />
 
           <div className="layout-content content-body">
             {post ? (

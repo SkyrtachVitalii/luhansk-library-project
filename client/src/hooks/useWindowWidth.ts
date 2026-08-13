@@ -3,21 +3,21 @@
 import { useEffect, useState } from "react";
 
 export const useWindowWidth = () => {
-  const [windowWidth, setWindowWidth] = useState(
-    typeof window !== "undefined" ? window.innerWidth : 0
-  );
+  const [windowWidth, setWindowWidth] = useState(0);
 
   useEffect(() => {
-    if (typeof window === "undefined") {
-      return;
-    }
     const handleResize = () => {
-        setWindowWidth(window.innerWidth);
-    }
+      setWindowWidth(window.innerWidth);
+    };
+
+    // Встановлюємо актуальну ширину після монтування на клієнті
+    handleResize();
+
     window.addEventListener("resize", handleResize);
     return () => {
       window.removeEventListener("resize", handleResize);
-    }
+    };
   }, []);
+
   return windowWidth;
 };

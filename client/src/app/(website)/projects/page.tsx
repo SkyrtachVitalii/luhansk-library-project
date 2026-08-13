@@ -22,9 +22,7 @@ export default function Projects() {
       <div className="container py-10">
         <div className="layout-grid">
           
-          <aside className="layout-sidebar">
-            <AsideMenu items={projectsMenuItems} />
-          </aside>
+          <AsideMenu items={projectsMenuItems} />
 
           <div className="layout-content content-body">
             {post ? (

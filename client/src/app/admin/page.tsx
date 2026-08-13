@@ -1,9 +1,9 @@
-import { verifySession } from "@/lib/auth";
+import { getSession } from "@/lib/api";
 import styles from "./AdminPanel.module.scss";
 import { redirect } from "next/navigation";
 
 export default async function AdminPanel() {
-  const session = await verifySession();
+  const session = await getSession();
 
   if (!session) {
     redirect("/");

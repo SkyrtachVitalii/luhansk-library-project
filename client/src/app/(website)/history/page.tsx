@@ -4,6 +4,7 @@ import React from 'react';
 import { useGetPostsQuery } from '@/lib/redux/services/postsApi';
 import Preloader from '@/components/Preloader/Preloader';
 import AsideMenu from '@/components/AsideMenu/AsideMenu';
+import SafeHTML from '@/components/SafeHTML/SafeHTML';
 import { aboutSidebarMenu } from '@/config/menus'; // Ваше меню "Про бібліотеку"
 
 export default function HistoryPage() {
@@ -30,19 +31,14 @@ export default function HistoryPage() {
         <div className="layout-grid">
           
           {/* ЛІВА КОЛОНКА: Меню */}
-          <aside className="layout-sidebar">
-            <AsideMenu items={aboutSidebarMenu} />
-          </aside>
+          <AsideMenu items={aboutSidebarMenu} />
 
           {/* ПРАВА КОЛОНКА: Контент з бази */}
           {/* Додаємо клас .content-body ТІЛЬКИ СЮДИ, щоб застилізувати HTML з бази */}
           <div className="layout-content content-body">
             
             {post ? (
-              <>
-                {/* ВСТАВКА HTML КОНТЕНТУ */}
-                <div dangerouslySetInnerHTML={{ __html: post.content }} />
-              </>
+              <SafeHTML html={post.content} />
             ) : (
               // Якщо завантаження пройшло, але запису немає в базі
               !isLoading && (

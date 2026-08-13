@@ -1,4 +1,4 @@
-import { verifySession } from "@/lib/auth";
+import { getSession } from "@/lib/api";
 import { redirect } from "next/navigation";
 import { adminMenuItems, managerMenuItems } from "@/config/menus";
 import Header from "@/components/Header/Header"; // 👇 Імпортуємо Хедер
@@ -11,7 +11,7 @@ export default async function AdminLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const session = await verifySession();
+  const session = await getSession();
 
   // 1. Перевірка доступу
   if (!session) redirect("/");

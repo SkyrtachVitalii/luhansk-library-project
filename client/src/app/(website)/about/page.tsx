@@ -4,6 +4,7 @@ import React from 'react';
 import { useGetPostsQuery } from '@/lib/redux/services/postsApi';
 import Preloader from '@/components/Preloader/Preloader';
 import AsideMenu from '@/components/AsideMenu/AsideMenu';
+import SafeHTML from '@/components/SafeHTML/SafeHTML';
 import { aboutSidebarMenu } from '@/config/menus';
 
 export default function AboutPage() {
@@ -21,16 +22,12 @@ export default function AboutPage() {
     <Preloader isLoading={isLoading} type="local">
       <div className="container py-10">
         <div className="layout-grid">
-          
-          <aside className="layout-sidebar">
-            <AsideMenu items={aboutSidebarMenu} />
-          </aside>
+
+          <AsideMenu items={aboutSidebarMenu} />
 
           <div className="layout-content content-body">
             {post ? (
-              <>
-                <div dangerouslySetInnerHTML={{ __html: post.content }} />
-              </>
+              <SafeHTML html={post.content} />
             ) : (
               !isLoading && <p>Інформація про бібліотеку готується до публікації.</p>
             )}

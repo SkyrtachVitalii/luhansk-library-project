@@ -1,35 +1,45 @@
-import { verifySession } from "@/lib/auth";
 import { redirect } from "next/navigation";
-import { connectToDB } from "@/lib/db";
-import { User } from "@/lib/models/User";
+import { cookies } from "next/headers";
+import { getSession } from "@/lib/api";
 import AdminAllUsers from "@/components/AdminAllUsers/AdminAllUsers";
-import { IUser } from "@/types";
+import { tableUserData } from "@/types";
 
 export default async function AllUsersPage() {
-  const session = await verifySession();
+  const cookieStore = await cookies();
+  const token = cookieStore.get("token")?.value;
+  const session = await getSession();
 
-  // Захист: Менеджери не мають доступу до списку юзерів (згідно твого меню)
-  // Якщо в menus.ts у менеджера немає цього пункту, то і тут його треба відшити
+  if (!token) {
+     redirect("/");
+  }
+
+  // Захист: Менеджери не мають доступу до списку юзерів
   if (!session || session.role !== "admin") {
-     // Якщо це менеджер - хай йде до постів
      if (session?.role === "manager") redirect("/admin/all-posts");
      redirect("/");
   }
 
-  await connectToDB();
-
-  // Отримуємо всіх користувачів, сортуємо за датою створення
-  const userDocuments = await User.find({}).sort({ createdAt: -1 }).lean();
-
-  // Перетворюємо дані для передачі клієнтському компоненту
-  const users = userDocuments.map((userDocument: IUser) => ({
-    _id: userDocument._id.toString(),
-    email: userDocument.email,
-    name: `${userDocument.lastName || ""} ${userDocument.firstName || ""}`.trim() || userDocument.email, // Якщо ПІБ немає, показуємо email
-    role: userDocument.role,
-    createdAt: userDocument.createdAt ? userDocument.createdAt.toISOString() : new Date().toISOString(),
-    updatedAt: userDocument.updatedAt ? userDocument.updatedAt.toISOString() : new Date().toISOString(),
-  }));
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+  let users: tableUserData[] = [];
+  try {
+    const res = await fetch(`${apiUrl}/api/users`, {
+      headers: { Cookie: `token=${token}` },
+      cache: 'no-store'
+    });
+    if (res.ok) {
+      const userDocuments = await res.json();
+      users = userDocuments.map((userDocument: Record<string, unknown>) => ({
+        _id: String(userDocument._id || ""),
+        email: String(userDocument.email || ""),
+        name: `${String(userDocument.lastName || "")} ${String(userDocument.firstName || "")}`.trim() || String(userDocument.email || ""),
+        role: String(userDocument.role || ""),
+        createdAt: userDocument.createdAt ? new Date(userDocument.createdAt as string).toISOString() : new Date().toISOString(),
+        updatedAt: userDocument.updatedAt ? new Date(userDocument.updatedAt as string).toISOString() : new Date().toISOString(),
+      }));
+    }
+  } catch (error) {
+    console.error("Error fetching users:", error);
+  }
 
   return (
     <AdminAllUsers 

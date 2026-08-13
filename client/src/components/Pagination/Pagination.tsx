@@ -1,7 +1,7 @@
 // client/src/components/Pagination/Pagination.tsx
 import React from 'react';
 import styles from './Pagination.module.scss';
-import { PaginationProps } from '@/types/layout.types'; 
+import { PaginationProps } from '@/types'; 
 
 const Pagination: React.FC<PaginationProps> = ({
   currentPage,
