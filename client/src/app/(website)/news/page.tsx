@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useGetPostsQuery } from '@/lib/redux/services/postsApi';
 import PostList from '@/components/PostList/PostList';
 import Pagination from '@/components/Pagination/Pagination';
@@ -28,15 +28,12 @@ const NewsPage = () => {
   if (error) return <div className="container py-10 text-center text-red-500">Помилка.</div>;
 
   return (
-    // ВАЖЛИВО: Передаємо isLoading прямо сюди. 
-    // Preloader сам потримає логотип 2 секунди, навіть якщо isLoading стане false раніше.
     <Preloader isLoading={isLoading} type="local">
       
       <div className={`container ${styles.pageContainer}`}>
         <div className={styles.layoutGrid}>
           
           <div className={styles.contentColumn}>
-            {/* isFetching тут залишаємо для ефекту прозорості при пагінації */}
             <div style={{ opacity: isFetching ? 0.6 : 1, transition: 'opacity 0.2s' }}>
               <PostList posts={posts} />
             </div>

@@ -1,5 +1,9 @@
 .pageContainer {
   padding: 40px 0;
+
+  @media (max-width: 768px) {
+    padding: 20px 0;
+  }
 }
 
 .pageTitle {
@@ -8,12 +12,22 @@
   margin-bottom: 30px;
   color: #333;
   text-align: center;
+
+  @media (max-width: 768px) {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
 }
 
 .layoutGrid {
   display: grid;
   grid-template-columns: 1fr;
   gap: 30px;
+  width: 100%;
+
+  @media (max-width: 768px) {
+    gap: 20px;
+  }
 
   @media (min-width: 992px) {
     grid-template-columns: 3fr 1fr;
@@ -22,10 +36,12 @@
 }
 
 .contentColumn {
-  // Основна колонка
+  width: 100%;
+  min-width: 0;
 }
 
 .sidebarColumn {
-  // Сайдбар
-    position: relative;
-}
+  position: relative;
+  width: 100%;
+  min-width: 0;
+}
