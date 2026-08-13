@@ -1,0 +1,84 @@
+.adminWrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; // Щоб футер завжди був знизу, навіть якщо контенту мало
+}
+
+.mainSection {
+  display: flex;
+  flex: 1; // Розтягує центральну частину на всю вільну висоту
+  position: relative;
+}
+
+.sidebarArea {
+  flex-shrink: 0; // Сайдбар не стискається
+  border-right: 1px solid #eee;
+  background: #fff;
+}
+
+.contentArea {
+  flex-grow: 1; // Контент займає всю решту ширини
+  background-color: #f3f4f6;
+  padding: 30px;
+  overflow-x: hidden;
+  min-height: 80vh; // Щоб займало більшість екрану
+}
+
+// .adminContainer {
+//   width: 100%;
+//   padding: 20px 40px; // Трохи більше відступів з боків для адмінки
+//   min-height: 60vh;
+  
+//   // Якщо глобальний layout-grid має фіксовану ширину, тут можна його перевизначити
+//   // Але зазвичай grid адаптується під батьківський контейнер
+// }
+
+.adminContainer {
+  min-height: 80vh; // Щоб займало більшість екрану
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--background-secondary, #f5f5f5); // Використовуємо твої змінні теми, якщо є
+  padding: 20px;
+}
+
+.adminCard {
+  background: var(--background-primary, #fff);
+  padding: 3rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  max-width: 600px;
+  width: 100%;
+
+  h1 {
+    margin-bottom: 1rem;
+    font-size: 2rem;
+    color: var(--text-primary, #333);
+  }
+
+  p {
+    color: var(--text-secondary, #666);
+    margin-bottom: 0.5rem;
+  }
+}
+
+.roleBadge {
+  display: inline-block;
+  background-color: #e0e7ff;
+  color: #3730a3;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+  text-transform: uppercase;
+}
+
+.placeholderContent {
+  margin-top: 2rem;
+  padding: 2rem;
+  border: 2px dashed #ccc;
+  border-radius: 8px;
+  color: #888;
+}

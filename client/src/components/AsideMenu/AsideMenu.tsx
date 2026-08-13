@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react"; // <--- Додали хуки
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { MenuItem } from "@/types";
+import { MenuItem, TimeoutId } from "@/types";
 import styles from "./AsideMenu.module.scss";
 
 interface AsideMenuProps {
@@ -25,17 +25,20 @@ const AsideMenu: React.FC<AsideMenuProps> = ({ items }) => {
       setCurrentHash(window.location.hash);
     };
 
+    let clickTimer: TimeoutId = null;
+    const handleClick = () => {
+      clickTimer = setTimeout(() => setCurrentHash(window.location.hash), 50);
+    };
+
     // Слухаємо подію зміни хешу
     window.addEventListener("hashchange", handleHashChange);
-
-    // Також слухаємо клік, щоб оновити стан миттєво (для кращого UX)
-    window.addEventListener("click", () => {
-      // Невелика затримка, щоб URL встиг оновитися
-      setTimeout(() => setCurrentHash(window.location.hash), 50);
-    });
+    // Слухаємо клік, щоб оновити стан миттєво
+    window.addEventListener("click", handleClick);
 
     return () => {
       window.removeEventListener("hashchange", handleHashChange);
+      window.removeEventListener("click", handleClick);
+      if (clickTimer) clearTimeout(clickTimer);
     };
   }, []);
 
@@ -60,41 +63,43 @@ const AsideMenu: React.FC<AsideMenuProps> = ({ items }) => {
   };
 
   return (
-    <nav className={styles.menuContainer}>
-      {items.map((item) => {
-        const isExternal = item.href.startsWith("http");
-        // Обчислюємо активний стан
-        const activeClass = isActive(item.href) ? styles.active : "";
+    <aside className="layout-sidebar">
+      <nav className={styles.menuContainer}>
+        {items.map((item) => {
+          const isExternal = item.href.startsWith("http");
+          // Обчислюємо активний стан
+          const activeClass = isActive(item.href) ? styles.active : "";
 
-        if (isExternal) {
+          if (isExternal) {
+            return (
+              <a
+                key={item.id}
+                href={item.href}
+                className={`${styles.menuItem} ${activeClass}`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {item.name}
+              </a>
+            );
+          }
+
           return (
-            <a
+            <Link
               key={item.id}
               href={item.href}
               className={`${styles.menuItem} ${activeClass}`}
-              target="_blank"
-              rel="noopener noreferrer"
+              // Додатково оновлюємо хеш при кліку вручну
+              onClick={() => {
+                if (item.href.startsWith("#")) setCurrentHash(item.href);
+              }}
             >
               {item.name}
-            </a>
+            </Link>
           );
-        }
-
-        return (
-          <Link
-            key={item.id}
-            href={item.href}
-            className={`${styles.menuItem} ${activeClass}`}
-            // Додатково оновлюємо хеш при кліку вручну
-            onClick={() => {
-              if (item.href.startsWith("#")) setCurrentHash(item.href);
-            }}
-          >
-            {item.name}
-          </Link>
-        );
-      })}
-    </nav>
+        })}
+      </nav>
+    </aside>
   );
 };
 

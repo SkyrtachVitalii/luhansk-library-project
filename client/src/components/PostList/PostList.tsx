@@ -6,6 +6,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { IPost } from "@/types";
 import styles from "./PostList.module.scss";
+import SafeHTML from "../SafeHTML/SafeHTML";
 
 // 1. Описуємо, що компонент очікує отримати ззовні
 interface PostListProps {
@@ -28,9 +29,9 @@ export default function PostList({ posts }: PostListProps) {
       {posts.map((post: IPost) => {
         // Перевіряємо, чи це архівний пост
         const isArchived = post.tags?.includes("archive");
-        const postUrl = `/article/${post.oldId}`;
+        const postUrl = post.oldId ? `/article/${post.oldId}` : `/article/${post._id}`;
         return (
-          <article key={post.oldId} className={styles.postItem}>
+          <article key={post._id || post.oldId} className={styles.postItem}>
             <header className={styles.postHeader}>
               <Link
                 href={postUrl}
@@ -65,9 +66,9 @@ export default function PostList({ posts }: PostListProps) {
 
             {/* Контент */}
             {isArchived ? (
-              <div
+              <SafeHTML
                 className={`${styles.postContent} ${styles.archivedContent}`}
-                dangerouslySetInnerHTML={{ __html: post.shortDescription }}
+                html={post.shortDescription}
               />
             ) : (
               <div className={styles.postContent}>

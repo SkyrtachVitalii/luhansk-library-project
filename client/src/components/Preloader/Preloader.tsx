@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import {MIN_PRELOADER_TIME} from '@/config/constants';
 import Image from 'next/image';
 import styles from './Preloader.module.scss';
-import { PreloaderProps } from "@/types";
+import { PreloaderProps, TimeoutId } from "@/types";
 
 const Preloader: React.FC<PreloaderProps> = ({ 
   isLoading = true, 
@@ -30,6 +30,7 @@ const Preloader: React.FC<PreloaderProps> = ({
 
   // 3. === ГЛОБАЛЬНА ЛОГІКА СКРОЛУ ===
   useEffect(() => {
+    let timerId: TimeoutId = null;
     // Спрацьовує тільки тоді, коли контент нарешті з'явився
     if (isContentReady) {
       const hash = window.location.hash;
@@ -37,7 +38,7 @@ const Preloader: React.FC<PreloaderProps> = ({
       if (hash) {
         // Робимо мікро-затримку (100мс), щоб React встиг "намалювати" HTML у DOM
         // після того, як ми прибрали прелоадер
-        setTimeout(() => {
+        timerId = setTimeout(() => {
           try {
             // Декодуємо хеш (на випадок кирилиці в URL) і прибираємо #
             const id = decodeURIComponent(hash.replace('#', ''));
@@ -52,6 +53,10 @@ const Preloader: React.FC<PreloaderProps> = ({
         }, 100);
       }
     }
+
+    return () => {
+      if (timerId) clearTimeout(timerId);
+    };
   }, [isContentReady]); // Залежність: запускати, коли контент стає готовим
 
   

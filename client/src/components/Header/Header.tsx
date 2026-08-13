@@ -21,31 +21,45 @@ const Header = () => {
   const [userName, setUserName] = useState<string | null>(null);
 
   useEffect(() => {
-    // Проста перевірка: чи є кука або токен в localStorage?
-    // Тобі треба адаптувати це під свій метод збереження входу
-    // Наприклад:
+    const controller = new AbortController();
+
     const checkAuth = async () => {
       try {
-        const res = await fetch("/api/auth/me");
-        const data = await res.json();
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+        const res = await fetch(`${apiUrl}/api/auth/me`, {
+          credentials: "include",
+          signal: controller.signal,
+        });
 
-        if (data.isAuth) {
-          setIsAuth(true);
-          setUserName(data.user?.name || "Guest");
+        if (res.ok) {
+          const data = await res.json();
+          if (data.user) {
+            setIsAuth(true);
+            const { firstName, lastName, email } = data.user;
+            const fullName = `${lastName || ''} ${firstName || ''}`.trim();
+            setUserName(fullName || email || 'Guest');
+          } else {
+            setIsAuth(false);
+            setUserName(null);
+          }
         } else {
           setIsAuth(false);
           setUserName(null);
         }
       } catch (error) {
-        console.error("Error checking auth status:", error);
-        setIsAuth(false);
+        if ((error as Error).name !== 'AbortError') {
+          console.error("Error checking auth status:", error);
+          setIsAuth(false);
+          setUserName(null);
+        }
       }
     };
+
     checkAuth();
     window.addEventListener("auth-change", checkAuth);
 
-    // Прибираємо слухача, коли компонент зникає (cleanup)
     return () => {
+      controller.abort();
       window.removeEventListener("auth-change", checkAuth);
     };
   }, [pathname]); // Запускається 1 раз при завантаженні
@@ -89,7 +103,8 @@ const Header = () => {
   // 2. ЛОГІКА ВИХОДУ
   const handleLogout = async () => {
     try {
-      await fetch("/api/auth/logout", { method: "POST" });
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+      await fetch(`${apiUrl}/api/auth/logout`, { method: "POST", credentials: "include" });
       // Після виходу оновлюємо стан авторизації
       setIsAuth(false);
       setUserName(null);

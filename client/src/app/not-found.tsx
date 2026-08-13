@@ -1,10 +1,13 @@
 import Link from "next/link";
 import Image from "next/image";
 import styles from "./not-found.module.scss";
+import Header from "@/components/Header/Header";
+import Footer from "@/components/Footer/Footer";
 
 export default function NotFound() {
   return (
     <>
+    <Header />
       <h1 className={styles.heading}>404</h1>
       <h2 className={styles.subheading}>Сторінку не знайдено</h2>
       <p className={styles.text}>
@@ -20,6 +23,7 @@ export default function NotFound() {
         height={200}
         className={styles.image}
       />
+      <Footer />
     </>
   );
 }

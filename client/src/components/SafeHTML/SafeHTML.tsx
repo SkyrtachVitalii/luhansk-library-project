@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useEffect, useRef, useMemo } from 'react';
-import { fixLegacyContent } from '@/utils/fixLegacyContent'; // <--- Імпорт нашої утиліти
+import DOMPurify from 'isomorphic-dompurify';
+import { fixLegacyContent } from '@/utils/fixLegacyContent';
 
 interface SafeHTMLProps {
   html: string;
@@ -11,10 +12,13 @@ interface SafeHTMLProps {
 const SafeHTML: React.FC<SafeHTMLProps> = ({ html, className = '' }) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // 1. ФІКСИМО ПОСИЛАННЯ (Миттєво, через useMemo)
-  // useMemo гарантує, що функція спрацює тільки коли зміниться вхідний html string
+  // 1. ФІКСИМО ПОСИЛАННЯ ТА САНІТИЗУЄМО HTML ВІД XSS
   const processedHtml = useMemo(() => {
-    return fixLegacyContent(html);
+    if (!html) return '';
+    const fixed = fixLegacyContent(html);
+    return DOMPurify.sanitize(fixed, {
+      ADD_ATTR: ['target', 'rel'],
+    });
   }, [html]);
 
   // 2. ФІКСИМО АКОРДЕОНИ (Після рендеру)
@@ -63,13 +67,12 @@ const SafeHTML: React.FC<SafeHTMLProps> = ({ html, className = '' }) => {
     return () => {
       toggles.forEach(toggle => toggle.removeEventListener('click', handleClick));
     };
-  }, [processedHtml]); // Залежність тепер від обробленого HTML
+  }, [processedHtml]);
 
   return (
     <div 
       ref={containerRef}
       className={`content-body ${className}`} 
-      // Вставляємо вже виправлений HTML з правильними посиланнями
       dangerouslySetInnerHTML={{ __html: processedHtml }} 
     />
   );
