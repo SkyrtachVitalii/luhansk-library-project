@@ -108,13 +108,14 @@ npm run test
 
 ## 🌐 5. Особливості деплою на Vercel (Serverless Functions)
 
-Файл `src/index.ts` експортує асинхронний хендлер за замовчуванням (`export default handler`), що дозволяє Vercel запускати бекенд як Serverless Function (`@vercel/node`).
+Для розгортання бекенду на Vercel створено точку входу [**`api/index.ts`**](/server/api/index.ts) та налаштовано перенаправлення запитів у [**`vercel.json`**](/server/vercel.json) (`rewrites` до `/api`).
 
 **Основні моменти:**
-1. **Кешування з'єднання БД**: З'єднання з MongoDB повторно використовується між Serverless-інвокаціями.
-2. **MongoDB Atlas Whitelist**: Обов'язково додайте `0.0.0.0/0` в **Network Access** у MongoDB Atlas, оскільки IP-адреси Vercel динамічні.
-3. **CORS**: Налаштовано `cors({ origin: true, credentials: true })` для підтримки крос-доменних запитів з фронтенду Next.js.
-4. **Змінні оточення Vercel**: У налаштуваннях проєкту `server` на Vercel необхідно додати `MONGO_URI` та `JWT_SECRET`.
+1. **Точка входу Vercel**: `api/index.ts` перенаправляє всі HTTP-запити до Express-хендлера з `src/index.ts`.
+2. **Кешування з'єднання БД**: З'єднання з MongoDB повторно використовується між Serverless-інвокаціями.
+3. **MongoDB Atlas Whitelist**: `0.0.0.0/0` додано в **Network Access** у MongoDB Atlas.
+4. **CORS**: Налаштовано `cors({ origin: true, credentials: true })` для підтримки крос-доменних запитів з фронтенду Next.js.
+5. **Змінні оточення Vercel**: У налаштуваннях проєкту `server` на Vercel необхідно додати `MONGO_URI` та `JWT_SECRET`.
 
 ---
 
