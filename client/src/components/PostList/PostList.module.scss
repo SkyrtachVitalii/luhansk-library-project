@@ -4,6 +4,10 @@
   display: flex;
   flex-direction: column;
   gap: 50px; // Великий відступ між новинами
+
+  @media (max-width: 768px) {
+    gap: 30px;
+  }
 }
 
 .postItem {
@@ -28,6 +32,12 @@
   text-decoration: none;
   display: block;
   margin-bottom: 10px;
+  overflow-wrap: break-word;
+  word-break: break-word;
+
+  @media (max-width: 768px) {
+    font-size: 1.35rem;
+  }
 
   &:hover {
     text-decoration: underline;
@@ -55,6 +65,7 @@
   // Адаптив для мобільних
   @media (max-width: 768px) {
     height: auto;
+    margin-bottom: 15px;
   }
 
   img {
@@ -68,9 +79,17 @@
   line-height: 1.6;
   color: var(--foreground-primary, #333);
   margin-top: 20px;
+  overflow-wrap: break-word;
+  word-break: break-word;
 
   // Стилі для звичайного тексту (нових постів)
   white-space: pre-wrap;
+
+  @media (max-width: 768px) {
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+
   > h3 {
     font-size: 24px;
     margin-top: 27px;
@@ -79,6 +98,10 @@
     font-weight: 400;
     line-height: 1.1;
     color: #444444;
+
+    @media (max-width: 768px) {
+      font-size: 20px;
+    }
   }
   >:first-child {
     /* стилі для першого блоку */
@@ -102,6 +125,10 @@
   p {
     margin-bottom: 1rem;
     text-align: justify;
+
+    @media (max-width: 768px) {
+      text-align: left;
+    }
   }
 }
 
@@ -119,3 +146,4 @@
     }
   }
 }
+

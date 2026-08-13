@@ -39,6 +39,6 @@ const session = await getSession();
 ---
 
 ## 🎨 Стилі та Макети
-- **`globals.scss`** — Глобальні стилі, нормалізація CSS, змінні тем та шрифт Inter/Roboto.
+- **`globals.scss`** — Глобальні стилі, нормалізація CSS, змінні тем, адаптивна сітка (`.layout-grid`), захист від переповнення контенту (`.content-body` з горизонтальним скролом для `table`/`iframe` та `overflow-wrap: break-word`) та шрифт Inter/Roboto/Tahoma.
 - **`layout.tsx`** — Кореневий макет, що підключає Redux `StoreProvider` та `ThemeProvider`.
 - **`loading.tsx` & `not-found.tsx`** — Стандартні інтерфейси завантаження та сторінки 404.

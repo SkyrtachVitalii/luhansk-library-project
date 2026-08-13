@@ -104,9 +104,17 @@
     height: var(--header-height-mobile);
   }
 
-  /* --- ЗМІНИ ТУТ: Перемикаємо видимість тексту для мобільного --- */
   .brand {
+    &__logo {
+      width: 50px;
+      height: 50px;
+    }
+
     &__siteName {
+      font-size: var(--site-name-size-mobile);
+      margin-left: 10px;
+      padding-right: 0;
+
       &Desktop {
         display: none;
       }
@@ -115,7 +123,6 @@
       }
     }
   }
-  /* ------------------------------------------------------------- */
 
   .nav {
     max-height: 0;
@@ -154,8 +161,8 @@
     }
   }
   .themeToggleBtn {
-    width: 50px;
-    height: 50px;
+    width: 40px;
+    height: 40px;
     background-image: url("/accessibility.png");
     background-size: cover;
     background-repeat: no-repeat;
@@ -163,14 +170,20 @@
     align-items: center;
     justify-content: center;
     position: static;
-    right: 0;
-    top: 25px;
     z-index: 10000;
   }
   .navToggleMobile {
     display: block;
+    margin-top: 0;
+    margin-bottom: 0;
   }
 }
 
 @media screen and (max-width: 480px) {
+  .brand {
+    &__logo {
+      width: 44px;
+      height: 44px;
+    }
+  }
 }
