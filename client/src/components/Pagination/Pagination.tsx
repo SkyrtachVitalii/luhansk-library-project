@@ -1,5 +1,6 @@
 // client/src/components/Pagination/Pagination.tsx
 import React from 'react';
+import Link from 'next/link';
 import styles from './Pagination.module.scss';
 import { PaginationProps } from '@/types'; 
 
@@ -7,11 +8,12 @@ const Pagination: React.FC<PaginationProps> = ({
   currentPage,
   totalPages,
   onPageChange,
+  baseUrl,
 }) => {
   if (totalPages <= 1) return null;
 
   const handlePageChange = (page: number) => {
-    if (page >= 1 && page <= totalPages && page !== currentPage) {
+    if (onPageChange && page >= 1 && page <= totalPages && page !== currentPage) {
       onPageChange(page);
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
@@ -45,26 +47,43 @@ const Pagination: React.FC<PaginationProps> = ({
 
   const pageNumbers = getPageNumbers();
 
+  const renderButton = (content: React.ReactNode, page: number, disabled: boolean = false, active: boolean = false) => {
+    const className = `${styles.pageBtn} ${active ? styles.active : ''}`.trim();
+    
+    if (disabled) {
+      return (
+        <button className={className} disabled>
+          {content}
+        </button>
+      );
+    }
+
+    if (baseUrl) {
+      return (
+        <Link href={`${baseUrl}?page=${page}`} className={className}>
+          {content}
+        </Link>
+      );
+    }
+
+    return (
+      <button
+        className={className}
+        onClick={() => handlePageChange(page)}
+      >
+        {content}
+      </button>
+    );
+  };
+
   return (
     <div className={styles.paginationContainer}>
       
       {/* Кнопка "Перша" */}
-      <button
-        className={styles.pageBtn}
-        onClick={() => handlePageChange(1)}
-        disabled={currentPage === 1}
-      >
-        Перша
-      </button>
+      {renderButton('Перша', 1, currentPage === 1)}
 
       {/* Кнопка "Попередня" */}
-      <button
-        className={styles.pageBtn}
-        onClick={() => handlePageChange(currentPage - 1)}
-        disabled={currentPage === 1}
-      >
-        Попередня
-      </button>
+      {renderButton('Попередня', currentPage - 1, currentPage === 1)}
 
       {/* Цифри */}
       {pageNumbers.map((number, index) => {
@@ -77,35 +96,17 @@ const Pagination: React.FC<PaginationProps> = ({
         }
 
         return (
-          <button
-            key={index}
-            className={`${styles.pageBtn} ${
-              currentPage === number ? styles.active : ''
-            }`}
-            onClick={() => handlePageChange(number as number)}
-          >
-            {number}
-          </button>
+          <React.Fragment key={index}>
+            {renderButton(number, number as number, false, currentPage === number)}
+          </React.Fragment>
         );
       })}
 
       {/* Кнопка "Наступна" */}
-      <button
-        className={styles.pageBtn}
-        onClick={() => handlePageChange(currentPage + 1)}
-        disabled={currentPage === totalPages}
-      >
-        Наступна
-      </button>
+      {renderButton('Наступна', currentPage + 1, currentPage === totalPages)}
 
       {/* Кнопка "Остання" */}
-      <button
-        className={styles.pageBtn}
-        onClick={() => handlePageChange(totalPages)}
-        disabled={currentPage === totalPages}
-      >
-        Остання
-      </button>
+      {renderButton('Остання', totalPages, currentPage === totalPages)}
 
     </div>
   );

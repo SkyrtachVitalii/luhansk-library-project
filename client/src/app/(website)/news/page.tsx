@@ -1,67 +1,79 @@
-"use client";
-
-import { useState } from 'react';
-import { useGetPostsQuery } from '@/lib/redux/services/postsApi';
 import PostList from '@/components/PostList/PostList';
 import Pagination from '@/components/Pagination/Pagination';
-import Preloader from '@/components/Preloader/Preloader'; // Наш оновлений компонент
 import styles from './NewsPage.module.scss';
 import Sidebar from '@/components/Sidebar/Sidebar';
+import { PostsResponse } from '@/types';
+import { Metadata } from 'next';
 
-const NewsPage = () => {
-  const [currentPage, setCurrentPage] = useState(1);
-  const LIMIT = 20;
+export const metadata: Metadata = {
+  title: 'Новини Бібліотеки',
+  description: 'Останні новини та події нашої бібліотеки',
+};
 
-  const { data, isLoading, isFetching, error } = useGetPostsQuery({
-    page: currentPage,
-    limit: LIMIT,
-    category: 'news', 
+async function getNews(page: number): Promise<PostsResponse> {
+  const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+  const res = await fetch(`${baseUrl}/api/posts?page=${page}&limit=20&category=news`, {
+    next: { revalidate: 300 }
   });
+
+  if (!res.ok) {
+    throw new Error('Failed to fetch news');
+  }
+
+  return res.json();
+}
+
+interface PageProps {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}
+
+export default async function NewsPage(props: PageProps) {
+  const searchParams = await props.searchParams;
+  const pageParam = searchParams?.page;
+  const currentPage = pageParam ? parseInt(pageParam as string, 10) : 1;
+
+  let data: PostsResponse | null = null;
+  let error = false;
+
+  try {
+    data = await getNews(currentPage);
+  } catch (e) {
+    console.error('Error fetching news:', e);
+    error = true;
+  }
+
+  if (error) return <div className="container py-10 text-center text-red-500">Помилка завантаження новин.</div>;
 
   const posts = data?.data || [];
   const totalPages = data?.numberOfPages || 0;
 
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
-  };
-
-  if (error) return <div className="container py-10 text-center text-red-500">Помилка.</div>;
-
   return (
-    <Preloader isLoading={isLoading} type="local">
-      
-      <div className={`container ${styles.pageContainer}`}>
-        <div className={styles.layoutGrid}>
-          
-          <div className={styles.contentColumn}>
-            <div style={{ opacity: isFetching ? 0.6 : 1, transition: 'opacity 0.2s' }}>
-              <PostList posts={posts} />
-            </div>
+    <div className={`container ${styles.pageContainer}`}>
+      <div className={styles.layoutGrid}>
+        
+        <div className={styles.contentColumn}>
+          <PostList posts={posts} />
 
-            {posts.length > 0 && (
-              <Pagination
-                currentPage={currentPage}
-                totalPages={totalPages}
-                onPageChange={handlePageChange}
-              />
-            )}
+          {posts.length > 0 && (
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              baseUrl="/news"
+            />
+          )}
 
-            {posts.length === 0 && (
-              <p className="text-center py-10">Новин поки немає.</p>
-            )}
-          </div>
-
-          <aside className={styles.sidebarColumn}>
-            <div className={styles.stickyWidget}>
-              <Sidebar />
-            </div>
-          </aside>
-
+          {posts.length === 0 && (
+            <p className="text-center py-10">Новин поки немає.</p>
+          )}
         </div>
+
+        <aside className={styles.sidebarColumn}>
+          <div className={styles.stickyWidget}>
+            <Sidebar />
+          </div>
+        </aside>
+
       </div>
-
-    </Preloader>
+    </div>
   );
-};
-
-export default NewsPage;
+}

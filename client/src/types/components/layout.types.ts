@@ -23,5 +23,6 @@ export interface SocialHelp {
 export interface PaginationProps {
   currentPage: number;
   totalPages: number;
-  onPageChange: (page: number) => void;
+  onPageChange?: (page: number) => void;
+  baseUrl?: string;
 }
