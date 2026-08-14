@@ -1,4 +1,4 @@
-import { getSession } from "@/lib/api";
+import { getSession } from "@/api/auth.server";
 import styles from "./AdminPanel.module.scss";
 import { redirect } from "next/navigation";
 
@@ -18,7 +18,7 @@ export default async function AdminPanel() {
       <div className={styles.adminCard}>
         <h1>⚙️ Адмін-панель</h1>
         <p>
-          Вітаємо, <strong>{session.name}</strong>!
+          Вітаємо, <strong>{session.firstName}</strong>!
         </p>
         <p className={styles.roleBadge}>Ваша роль: {session.role}</p>
 

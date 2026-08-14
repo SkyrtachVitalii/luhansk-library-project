@@ -1,4 +1,4 @@
-import { getSession } from "@/lib/api";
+import { getSession } from "@/api/auth.server";
 import { redirect } from "next/navigation";
 import { adminMenuItems, managerMenuItems } from "@/config/menus";
 import Header from "@/components/Header/Header"; // 👇 Імпортуємо Хедер

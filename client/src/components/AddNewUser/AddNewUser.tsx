@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import styles from "./AddNewUser.module.scss";
+import { authApi } from "../../api/auth";
 
 interface AddNewUserProps {
   onClose: () => void;
@@ -34,27 +35,15 @@ export default function AddNewUser({ onClose, onSuccess }: AddNewUserProps) {
     setIsLoading(true);
 
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
-      const res = await fetch(`${apiUrl}/api/auth/register`, {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(formData)
-      });
-
-      if (!res.ok) {
-        const errorData = await res.json();
-        throw new Error(errorData.error || "Помилка при створенні");
-      }
+      await authApi.register(formData);
 
       alert("Користувача створено успішно!");
       if (onSuccess) onSuccess(); // Оновлюємо таблицю
       onClose(); // Закриваємо модалку
 
-    } catch (err) {
-      setError("Щось пішло не так. Перевірте дані.");
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (err: any) {
+      setError(err.message || "Щось пішло не так. Перевірте дані.");
     } finally {
       setIsLoading(false);
     }

@@ -4,6 +4,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import styles from "./LoginModal.module.scss";
+import { authApi } from "../../api/auth";
 
 export default function LoginModal() {
   const [isOpen, setIsOpen] = useState(false);
@@ -47,33 +48,10 @@ export default function LoginModal() {
     setError(null);
 
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
-      const res = await fetch(`${apiUrl}/api/auth/login`, {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: formData.login,
-          password: formData.password,
-        }),
+      const data = await authApi.login({
+        email: formData.login,
+        password: formData.password,
       });
-
-      let data: Record<string, unknown> = {};
-      try {
-        data = (await res.json()) as Record<string, unknown>;
-      } catch {
-        // Якщо сервер повернув не-JSON відповідь (наприклад, 500 HTML)
-      }
-
-      if (!res.ok) {
-        throw new Error(
-          (typeof data.error === "string" && data.error) ||
-            (typeof data.message === "string" && data.message) ||
-            "Login failed"
-        );
-      }
 
       window.dispatchEvent(new Event("auth-change"));
 

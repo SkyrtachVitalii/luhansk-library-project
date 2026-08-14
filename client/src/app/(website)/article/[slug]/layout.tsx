@@ -1,7 +1,7 @@
 // src/app/news/[slug]/layout.tsx
 
 import { Metadata } from "next";
-import { getPost } from "@/lib/api"; // Імпортуємо фетчер з api.ts
+import { postsServerApi } from "@/api/posts.server"; // Імпортуємо фетчер з api.ts
 
 type Props = {
   children: React.ReactNode;
@@ -11,7 +11,7 @@ type Props = {
 // === ГЕНЕРАЦІЯ SEO ===
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const post = await getPost(slug);
+  const post = await postsServerApi.getPost(slug);
   const siteUrl = process.env.PUBLIC_SITE_URL || "http://localhost:3000";
   
 

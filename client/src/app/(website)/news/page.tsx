@@ -4,24 +4,13 @@ import styles from './NewsPage.module.scss';
 import Sidebar from '@/components/Sidebar/Sidebar';
 import { PostsResponse } from '@/types';
 import { Metadata } from 'next';
+import { postsServerApi } from '@/api/posts.server';
 
 export const metadata: Metadata = {
   title: 'Новини Бібліотеки',
   description: 'Останні новини та події нашої бібліотеки',
 };
 
-async function getNews(page: number): Promise<PostsResponse> {
-  const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
-  const res = await fetch(`${baseUrl}/api/posts?page=${page}&limit=20&category=news`, {
-    next: { revalidate: 300 }
-  });
-
-  if (!res.ok) {
-    throw new Error('Failed to fetch news');
-  }
-
-  return res.json();
-}
 
 interface PageProps {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
@@ -36,7 +25,7 @@ export default async function NewsPage(props: PageProps) {
   let error = false;
 
   try {
-    data = await getNews(currentPage);
+    data = await postsServerApi.getNews(currentPage);
   } catch (e) {
     console.error('Error fetching news:', e);
     error = true;

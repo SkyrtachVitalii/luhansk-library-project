@@ -1,11 +1,11 @@
-// client/src/lib/redux/services/postsApi.ts
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { PostsResponse, PostsArgs } from '@/types';
+import { API_URL } from '@/api/config';
 
 export const postsApi = createApi({
   reducerPath: 'postsApi',
   baseQuery: fetchBaseQuery({ 
-    baseUrl: `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'}/api/` 
+    baseUrl: `${API_URL}/api/` 
   }),
   tagTypes: ['Posts'], // Корисно для кешування (щоб оновлювати дані при додаванні поста)
   endpoints: (builder) => ({

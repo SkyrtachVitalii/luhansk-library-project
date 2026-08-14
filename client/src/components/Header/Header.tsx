@@ -6,17 +6,17 @@ import Image from "next/image";
 import styles from "./Header.module.scss";
 import { useTheme } from "../../hooks/useTheme";
 import { useWindowWidth } from "../../hooks/useWindowWidth"; // Можна видалити, якщо більше ніде не юзається
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { useState, useEffect, useRef } from "react";
 import { headerMenuItems } from "../../config/menus";
+import { authApi } from "../../api/auth";
 
 const Header = () => {
   const headerRef = useRef<HTMLElement>(null);
-  const { theme, toggleTheme } = useTheme();
+  const { toggleTheme } = useTheme();
   const [mobileMenuStatus, setMobileMenuStatus] = useState(false);
   const pathname = usePathname();
   const windowWidth = useWindowWidth(); // Можна видалити, якщо використовувався тільки для заголовка
-  const router = useRouter();
   const [isAuth, setIsAuth] = useState(false); // Тимчасово, поки немає реального стану авторизації
   const [userName, setUserName] = useState<string | null>(null);
 
@@ -25,23 +25,13 @@ const Header = () => {
 
     const checkAuth = async () => {
       try {
-        const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
-        const res = await fetch(`${apiUrl}/api/auth/me`, {
-          credentials: "include",
-          signal: controller.signal,
-        });
+        const data = await authApi.me();
 
-        if (res.ok) {
-          const data = await res.json();
-          if (data.user) {
-            setIsAuth(true);
-            const { firstName, lastName, email } = data.user;
-            const fullName = `${lastName || ''} ${firstName || ''}`.trim();
-            setUserName(fullName || email || 'Guest');
-          } else {
-            setIsAuth(false);
-            setUserName(null);
-          }
+        if (data && data.user) {
+          setIsAuth(true);
+          const { firstName, lastName, email } = data.user;
+          const fullName = `${lastName || ''} ${firstName || ''}`.trim();
+          setUserName(fullName || email || 'Guest');
         } else {
           setIsAuth(false);
           setUserName(null);
@@ -103,8 +93,7 @@ const Header = () => {
   // 2. ЛОГІКА ВИХОДУ
   const handleLogout = async () => {
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
-      await fetch(`${apiUrl}/api/auth/logout`, { method: "POST", credentials: "include" });
+      await authApi.logout();
       // Після виходу оновлюємо стан авторизації
       setIsAuth(false);
       setUserName(null);
