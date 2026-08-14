@@ -1,9 +1,21 @@
 import { Request, Response, NextFunction } from 'express';
 import { AuthService } from '../services/auth.service';
 
+const getTokenFromReq = (req: Request): string | undefined => {
+  if (req.cookies?.token) return req.cookies.token;
+  if (req.headers.cookie) {
+    const match = req.headers.cookie.match(/(?:^|;\s*)token=([^;]+)/);
+    if (match) return match[1];
+  }
+  if (req.headers.authorization?.startsWith('Bearer ')) {
+    return req.headers.authorization.split(' ')[1];
+  }
+  return undefined;
+};
+
 export const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
   try {
-    const token = req.cookies.token;
+    const token = getTokenFromReq(req);
     if (!token) {
       res.status(401).json({ error: 'Authentication required' });
       return;
@@ -23,7 +35,7 @@ export const authMiddleware = (req: Request, res: Response, next: NextFunction) 
  */
 export const optionalAuthMiddleware = (req: Request, res: Response, next: NextFunction) => {
   try {
-    const token = req.cookies?.token;
+    const token = getTokenFromReq(req);
     if (token) {
       const decoded = AuthService.verifyToken(token);
       (req as any).user = decoded;

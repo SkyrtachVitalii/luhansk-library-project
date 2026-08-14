@@ -1,19 +1,18 @@
-import http from 'http';
-import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import fs from 'fs';
-import app from './app';
-import { initSocket } from './socket';
 
-// Визначаємо середовище: Vercel автоматично встановлює process.env.VERCEL = '1'
+// 1. Завантажуємо правильний файл оточення ДО імпорту app
 const isVercel = !!process.env.VERCEL;
-
-// 1. Завантажуємо правильний файл оточення
 if (!isVercel && fs.existsSync('.development.env')) {
   dotenv.config({ path: '.development.env' });
 } else {
   dotenv.config(); // На Vercel вантажимо стандартний або беремо змінні з Dashboard
 }
+
+import http from 'http';
+import mongoose from 'mongoose';
+import app from './app';
+import { initSocket } from './socket';
 
 // 2. Застосовуємо DNS фікс тільки для локального середовища
 if (!isVercel) {

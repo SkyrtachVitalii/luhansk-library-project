@@ -27,6 +27,7 @@ graph LR
 - **Стейт-менеджмент:** Redux Toolkit `v2.11.0` + RTK Query (`@reduxjs/toolkit/query/react`)
 - **Стилізація:** SCSS / Sass Modules (`*.module.scss`) `v1.89.2`
 - **Анімації:** GSAP (GreenSock Animation Platform) `v3.14.2`
+- **Авторизація & Middleware:** `jose` (перевірка та валідація JWT-токена в Edge Middleware)
 - **Real-time зв'язок:** Socket.io-client `v4.8.1`
 - **Парсинг архівного вмісту:** `html-react-parser` `v5.2.10`
 
@@ -42,6 +43,9 @@ NEXT_PUBLIC_API_URL=http://localhost:5000
 
 # Початковий URL публічного сайту (для метатегів та SEO)
 PUBLIC_SITE_URL=http://localhost:3000
+
+# Секретний ключ для перевірки JWT (має збігатися з бекендом)
+JWT_SECRET=your_jwt_secret_key
 ```
 
 ---
@@ -75,6 +79,7 @@ PUBLIC_SITE_URL=http://localhost:3000
 
 ## 📂 Структура каталогу `client/src`
 
+- **`proxy.ts`** — Централізований захист роутів `/admin/*` на рівні Edge/Node HTTP-запитів за допомогою бібліотеки `jose` (нова конвенція Next.js 16).
 - **`app/`** — Маршрутизація Next.js App Router (Route groups: `(website)`, `admin`, `register`, dynamic routes).
 - **`components/`** — Реутилізовні UI-компоненти (Header, Footer, PostList, SingleOldPost, Auth, Admin, Preloader, SafeHTML).
 - **`config/`** — Константи, шляхи медіафайлів (Cloudinary CDN), меню сайту.
@@ -83,3 +88,4 @@ PUBLIC_SITE_URL=http://localhost:3000
 - **`lib/`** — Налаштування Redux Store, RTK Query (`postsApi`), HTTP-хелпери (`api.ts`), Socket.io клієнт (`socket.ts`).
 - **`types/`** — Модулі типізації TypeScript (`post.types.ts`, `user.types.ts`, `layout.types.ts`, `theme.types.ts`).
 - **`utils/`** — Утиліти форматування та обробки даних (`fixLegacyContent.ts`).
+

@@ -2,7 +2,7 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { User, IUser } from '../models/User';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'fallback_secret_key';
+const getJwtSecret = () => process.env.JWT_SECRET || 'fallback_secret_key';
 const JWT_EXPIRES_IN = '7d';
 
 export class AuthService {
@@ -51,7 +51,7 @@ export class AuthService {
 
     const token = jwt.sign(
       { userId: user._id, role: user.role },
-      JWT_SECRET,
+      getJwtSecret(),
       { expiresIn: JWT_EXPIRES_IN }
     );
 
@@ -59,6 +59,6 @@ export class AuthService {
   }
 
   static verifyToken(token: string): any {
-    return jwt.verify(token, JWT_SECRET);
+    return jwt.verify(token, getJwtSecret());
   }
 }

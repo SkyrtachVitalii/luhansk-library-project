@@ -37,6 +37,7 @@
 | Метод | Шлях | Мідлвари (Захист) | Контролер | Опис |
 | :---: | :--- | :--- | :--- | :--- |
 | `GET` | `/api/users/` | `authMiddleware` | `getAllUsers` | Отримання списку всіх користувачів (для автентифікованих) |
+| `POST` | `/api/users/` | `authMiddleware`, `requireAdmin` | `createUser` | Створення нового користувача адміністратором (**тільки для admin**) |
 | `DELETE` | `/api/users/:id` | `authMiddleware`, `requireAdmin` | `deleteUser` | Видалення користувача за ID (**тільки для admin**) |
 
 ---
