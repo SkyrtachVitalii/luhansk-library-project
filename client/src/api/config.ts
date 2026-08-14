@@ -1,11 +1,12 @@
-export const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+export const API_URL = process.env.NEXT_PUBLIC_API_URL ?? '';
 
 /**
  * Обгортка навколо нативного fetch API, яка автоматично підставляє API_URL,
  * за замовчуванням обробляє JSON content-type та стандартизує викидання помилок.
  */
 export async function fetchApi<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
-  const url = `${API_URL}${endpoint.startsWith('/') ? endpoint : `/${endpoint}`}`;
+  const cleanEndpoint = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
+  const url = API_URL ? `${API_URL}${cleanEndpoint}` : cleanEndpoint;
 
   const headers = new Headers(options.headers || {});
   
