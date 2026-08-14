@@ -1,4 +1,8 @@
-export const API_URL = process.env.NEXT_PUBLIC_API_URL ?? '';
+// Якщо ми в браузері (typeof window !== 'undefined'), використовуємо відносний шлях ('').
+// Це гарантує, що клієнтські запити потраплять у Next.js Route Handlers (або rewrites),
+// і Next.js зможе встановити First-Party куки.
+// Якщо ми на сервері (SSR), використовуємо абсолютний шлях до бекенду.
+export const API_URL = typeof window === 'undefined' ? (process.env.NEXT_PUBLIC_API_URL ?? '') : '';
 
 /**
  * Обгортка навколо нативного fetch API, яка автоматично підставляє API_URL,
