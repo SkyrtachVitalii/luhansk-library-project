@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import styles from "./AddNewUser.module.scss";
-import { authApi } from "../../api/auth";
+import { usersApi } from "../../api/users";
 
 interface AddNewUserProps {
   onClose: () => void;
@@ -35,15 +35,15 @@ export default function AddNewUser({ onClose, onSuccess }: AddNewUserProps) {
     setIsLoading(true);
 
     try {
-      await authApi.register(formData);
+      await usersApi.createUser(formData);
 
       alert("Користувача створено успішно!");
       if (onSuccess) onSuccess(); // Оновлюємо таблицю
       onClose(); // Закриваємо модалку
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (err: any) {
-      setError(err.message || "Щось пішло не так. Перевірте дані.");
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : "Щось пішло не так. Перевірте дані.";
+      setError(errorMessage);
     } finally {
       setIsLoading(false);
     }

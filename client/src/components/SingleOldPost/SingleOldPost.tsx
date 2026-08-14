@@ -7,13 +7,11 @@ import OldCarousel from "../OldCarousel/OldCarousel";
 import styles from "./SingleOldPost.module.scss";
 import { fixLegacyContent } from "@/utils/fixLegacyContent";
 
-import DOMPurify from "isomorphic-dompurify";
-
 interface SingleOldPostProps {
   post: IPost;
 }
 
-// 1. Підготовка контенту з санітизацією DOMPurify
+// 1. Підготовка контенту та трансформація посилань через fixLegacyContent
 const prepareContent = (html: string) => {
   if (!html) return "";
   let clean = html;
@@ -22,8 +20,7 @@ const prepareContent = (html: string) => {
   clean = clean.replace(/<div id="disqus_thread"[\s\S]*?<\/div>/gim, "");
   clean = clean.replace(/<noscript>[\s\S]*?<\/noscript>/gim, "");
 
-  clean = fixLegacyContent(clean);
-  return DOMPurify.sanitize(clean, { ADD_ATTR: ['target', 'rel'] });
+  return fixLegacyContent(clean);
 };
 
 // 2. Пошук картинок (без змін)
