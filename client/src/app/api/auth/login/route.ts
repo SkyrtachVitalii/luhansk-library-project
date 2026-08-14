@@ -2,7 +2,11 @@ import { NextResponse } from 'next/server';
 
 export async function POST(request: Request) {
   try {
-    const backendUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+    let backendUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+    // Fix Node 18+ localhost resolution issue
+    if (backendUrl.includes('localhost')) {
+      backendUrl = backendUrl.replace('localhost', '127.0.0.1');
+    }
     const body = await request.json();
 
     const res = await fetch(`${backendUrl.replace(/\/$/, '')}/api/auth/login`, {
