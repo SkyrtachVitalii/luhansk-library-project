@@ -30,7 +30,7 @@ export const login = async (req: Request, res: Response) => {
     const userObj = user.toObject();
     delete (userObj as any).passwordHash;
 
-    res.json({ message: 'Logged in successfully', user: userObj });
+    res.json({ message: 'Logged in successfully', user: userObj, token });
   } catch (error: any) {
     res.status(401).json({ error: error.message });
   }
