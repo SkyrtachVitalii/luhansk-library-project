@@ -1,12 +1,13 @@
 // client/src/app/layout.tsx
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Geist } from "next/font/google";
 import "@/app/globals.scss"; // Твої глобальні стилі
 import Providers from "@/lib/redux/StoreProvider"; // Твій Redux Provider
-import { ThemeProvider } from "@/context/ThemeContext";
+import { ThemeProvider } from "@/components/theme-provider";
 import LoginModal from "@/components/Auth/LoginModal";
+import { cn } from "@/lib/utils";
 
-const inter = Inter({ subsets: ["latin", "cyrillic"] });
+const inter = Inter({ subsets: ["latin", "cyrillic"], variable: "--font-inter" });
 
 export const metadata: Metadata = {
   title: "Luhansk Library",
@@ -19,10 +20,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="uk">
-      <body className={inter.className}>
+    <html lang="uk" suppressHydrationWarning className={cn("font-sans", inter.variable)}>
+      <body className="font-sans antialiased">
         <Providers>
-          <ThemeProvider>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
             {children}
           </ThemeProvider>
         </Providers>

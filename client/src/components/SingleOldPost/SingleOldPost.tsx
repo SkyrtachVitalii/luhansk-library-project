@@ -55,6 +55,11 @@ const SingleOldPost: React.FC<SingleOldPostProps> = ({ post }) => {
     replace: (domNode: DOMNode) => {
       if (!(domNode instanceof Element)) return;
 
+      // Запобігаємо помилці "Encountered a script tag while rendering React component"
+      if (domNode.name === "script") {
+        return <React.Fragment />;
+      }
+
       let images: string[] = [];
       let shouldReplace = false;
 
