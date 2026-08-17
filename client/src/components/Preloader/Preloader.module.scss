@@ -12,7 +12,7 @@
   width: 100vw;
   height: 100dvh;
   z-index: 500;
-  background-color: #fff; // Або прозорий, залежить від контексту
+  background-color: var(--background);
 }
 
 // Модифікатор для повного екрану (глобальне завантаження)

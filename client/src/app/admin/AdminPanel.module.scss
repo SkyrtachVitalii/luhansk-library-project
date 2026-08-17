@@ -1,49 +1,40 @@
 .adminWrapper {
   display: flex;
   flex-direction: column;
-  min-height: 100vh; // Щоб футер завжди був знизу, навіть якщо контенту мало
+  min-height: 100vh;
 }
 
 .mainSection {
   display: flex;
-  flex: 1; // Розтягує центральну частину на всю вільну висоту
+  flex: 1;
   position: relative;
 }
 
 .sidebarArea {
-  flex-shrink: 0; // Сайдбар не стискається
-  border-right: 1px solid #eee;
-  background: #fff;
+  flex-shrink: 0;
+  border-right: 1px solid var(--border);
+  background: var(--card);
 }
 
 .contentArea {
-  flex-grow: 1; // Контент займає всю решту ширини
-  background-color: #f3f4f6;
+  flex-grow: 1;
+  background-color: var(--muted);
   padding: 30px;
   overflow-x: hidden;
-  min-height: 80vh; // Щоб займало більшість екрану
+  min-height: 80vh;
 }
 
-// .adminContainer {
-//   width: 100%;
-//   padding: 20px 40px; // Трохи більше відступів з боків для адмінки
-//   min-height: 60vh;
-  
-//   // Якщо глобальний layout-grid має фіксовану ширину, тут можна його перевизначити
-//   // Але зазвичай grid адаптується під батьківський контейнер
-// }
-
 .adminContainer {
-  min-height: 80vh; // Щоб займало більшість екрану
+  min-height: 80vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: var(--background-secondary, #f5f5f5); // Використовуємо твої змінні теми, якщо є
+  background-color: var(--muted);
   padding: 20px;
 }
 
 .adminCard {
-  background: var(--background-primary, #fff);
+  background: var(--card);
   padding: 3rem;
   border-radius: 12px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
@@ -54,19 +45,19 @@
   h1 {
     margin-bottom: 1rem;
     font-size: 2rem;
-    color: var(--text-primary, #333);
+    color: var(--foreground);
   }
 
   p {
-    color: var(--text-secondary, #666);
+    color: var(--muted-foreground);
     margin-bottom: 0.5rem;
   }
 }
 
 .roleBadge {
   display: inline-block;
-  background-color: #e0e7ff;
-  color: #3730a3;
+  background-color: var(--role-badge-bg);
+  color: var(--role-badge-text);
   padding: 0.25rem 0.75rem;
   border-radius: 999px;
   font-weight: 600;
@@ -78,7 +69,7 @@
 .placeholderContent {
   margin-top: 2rem;
   padding: 2rem;
-  border: 2px dashed #ccc;
+  border: 2px dashed var(--border);
   border-radius: 8px;
-  color: #888;
+  color: var(--muted-foreground);
 }

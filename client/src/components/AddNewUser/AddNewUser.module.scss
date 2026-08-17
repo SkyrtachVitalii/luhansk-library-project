@@ -4,37 +4,37 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.6); // Затемнення фону
-  z-index: 1000; // Щоб був поверх всього
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: 1000;
   display: flex;
   justify-content: center;
   align-items: center;
-  backdrop-filter: blur(2px); // Легке розмиття фону (красиво)
+  backdrop-filter: blur(2px);
 }
 
 .modal {
   width: 90vw;
   height: 90vh;
-  background-color: #fff;
+  background-color: var(--card);
   border-radius: 12px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
   display: flex;
   flex-direction: column;
-  overflow: hidden; // Щоб контент не вилазив за округлення
+  overflow: hidden;
 }
 
 .header {
   padding: 20px 30px;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid var(--border);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #fafafa;
+  background-color: var(--muted);
 
   h2 {
     margin: 0;
     font-size: 1.5rem;
-    color: #333;
+    color: var(--foreground);
   }
 }
 
@@ -44,27 +44,27 @@
   font-size: 2rem;
   line-height: 1;
   cursor: pointer;
-  color: #666;
+  color: var(--muted-foreground);
   transition: color 0.2s;
 
   &:hover {
-    color: #b91c1c; // Червоний при наведенні
+    color: var(--accent-color1);
   }
 }
 
 .body {
-  flex: 1; // Займає всю доступну висоту
-  overflow-y: auto; // Скрол, якщо форма довга
+  flex: 1;
+  overflow-y: auto;
   padding: 30px;
 }
 
 .formGrid {
   display: grid;
-  grid-template-columns: 1fr 1fr; // Дві колонки
+  grid-template-columns: 1fr 1fr;
   gap: 20px;
 
   @media (max-width: 768px) {
-    grid-template-columns: 1fr; // На мобільному одна
+    grid-template-columns: 1fr;
   }
 }
 
@@ -76,32 +76,34 @@
   label {
     font-size: 0.9rem;
     font-weight: 600;
-    color: #444;
+    color: var(--accent-color2);
   }
 
   input, select {
     padding: 10px 12px;
-    border: 1px solid #ddd;
+    border: 1px solid var(--border);
     border-radius: 6px;
     font-size: 1rem;
+    background-color: var(--card);
+    color: var(--foreground);
     transition: border-color 0.2s;
 
     &:focus {
       outline: none;
-      border-color: #b91c1c; // Акцентний колір бібліотеки
+      border-color: var(--accent-color1);
       box-shadow: 0 0 0 2px rgba(185, 28, 28, 0.1);
     }
   }
 }
 
 .fullWidth {
-  grid-column: 1 / -1; // Розтягнути на всю ширину (для адреси чи коментарів)
+  grid-column: 1 / -1;
 }
 
 .footer {
   padding: 20px 30px;
-  border-top: 1px solid #eee;
-  background-color: #fafafa;
+  border-top: 1px solid var(--border);
+  background-color: var(--muted);
   display: flex;
   justify-content: flex-end;
   gap: 15px;
@@ -117,20 +119,21 @@
 }
 
 .btnCancel {
-  background-color: #e5e7eb;
-  color: #374151;
+  background-color: var(--accent);
+  color: var(--foreground);
 
   &:hover {
-    background-color: #d1d5db;
+    background-color: var(--muted-foreground);
+    color: var(--card);
   }
 }
 
 .btnSubmit {
-  background-color: #b91c1c;
-  color: white;
+  background-color: var(--accent-color1);
+  color: var(--accent-color3);
 
   &:hover {
-    background-color: #991b1b;
+    background-color: var(--accent-color7);
   }
 
   &:disabled {
@@ -140,9 +143,9 @@
 }
 
 .errorMsg {
-    color: #dc2626;
-    margin-bottom: 15px;
-    padding: 10px;
-    background: #fee2e2;
-    border-radius: 4px;
+  color: var(--btn-danger-text);
+  margin-bottom: 15px;
+  padding: 10px;
+  background: var(--btn-danger-bg);
+  border-radius: 4px;
 }

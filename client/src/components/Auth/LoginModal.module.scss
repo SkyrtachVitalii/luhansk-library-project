@@ -1,17 +1,14 @@
-// src/components/Auth/LoginModal.module.scss
 @use "sass:color";
 
-// --- Змінні кольорів (можна винести в глобальні змінні) ---
-$primary-color: #2c3e50; // Темно-синій (бібліотечний)
-$accent-color: #3498db; // Блакитний для кнопок
-$danger-color: #e74c3c; // Червоний для помилок/відміни
-$accent-color-light: #9F0000;
-$text-color: #333;
-$gray-light: #f4f4f4;
-$gray-border: #ddd;
-$white: #ffffff;
+$primary-color: var(--accent-color1);
+$accent-color: var(--accent-color6);
+$danger-color: var(--destructive);
+$accent-color-light: var(--accent-color1);
+$text-color: var(--foreground);
+$gray-light: var(--muted);
+$gray-border: var(--border);
+$white: var(--card);
 
-// Анімація появи
 @keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
@@ -24,24 +21,24 @@ $white: #ffffff;
 
 .overlay {
   position: fixed;
-  inset: 0; // Це скорочення для top: 0; right: 0; bottom: 0; left: 0;
-  background-color: rgba(0, 0, 0, 0.5); // Напівпрозорий чорний
-  backdrop-filter: blur(4px); // Ефект розмиття фону
-  z-index: 9999; // Поверх усього (навіть хедера)
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  z-index: 9999;
   display: flex;
   justify-content: center;
   align-items: center;
   animation: fadeIn 0.3s ease-out;
-  padding: 1rem; // Відступ, щоб на мобільних не прилипало до країв
+  padding: 1rem;
 }
 
 .modal {
   background: $white;
   width: 100%;
-  max-width: 420px; // Оптимальна ширина для логіну
+  max-width: 420px;
   padding: 2rem;
   border-radius: 12px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2); // Глибока тінь
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
   position: relative;
   animation: slideIn 0.3s ease-out;
   display: flex;
@@ -66,7 +63,7 @@ $white: #ffffff;
   background: none;
   border: none;
   font-size: 2rem;
-  color: #999;
+  color: var(--muted-foreground);
   cursor: pointer;
   line-height: 1;
   transition: color 0.2s;
@@ -94,13 +91,14 @@ $white: #ffffff;
     border: 1px solid $gray-border;
     border-radius: 6px;
     background-color: $gray-light;
+    color: var(--foreground);
     transition: all 0.2s;
 
     &:focus {
       outline: none;
       border-color: $accent-color;
       background-color: $white;
-      box-shadow: 0 0 0 3px rgba($accent-color, 0.1);
+      box-shadow: 0 0 0 3px rgba(67, 127, 163, 0.15);
     }
   }
 }
@@ -119,7 +117,7 @@ $white: #ffffff;
 
   label {
     font-size: 0.9rem;
-    color: #666;
+    color: var(--muted-foreground);
     cursor: pointer;
     user-select: none;
   }
@@ -127,12 +125,12 @@ $white: #ffffff;
 
 .error {
   color: $danger-color;
-  background-color: rgba($danger-color, 0.1);
+  background-color: var(--btn-danger-bg);
   padding: 0.75rem;
   border-radius: 6px;
   font-size: 0.85rem;
   text-align: center;
-  border: 1px solid rgba($danger-color, 0.2);
+  border: 1px solid var(--btn-danger-hover-bg);
 }
 
 .actions {
@@ -157,7 +155,7 @@ $white: #ffffff;
 
   .loginBtn {
     background-color: $accent-color-light;
-    color: $white;
+    color: var(--accent-color3);
     border: none;
     padding: 0.75rem 1.5rem;
     border-radius: 6px;
@@ -170,7 +168,7 @@ $white: #ffffff;
     gap: 0.5rem;
 
     &:hover {
-      background-color: color.adjust($accent-color, $lightness: -10%);
+      background-color: var(--accent-color7);
     }
 
     &:active {
@@ -178,7 +176,7 @@ $white: #ffffff;
     }
 
     &:disabled {
-      background-color: #ccc;
+      background-color: var(--muted-foreground);
       cursor: not-allowed;
     }
   }
@@ -194,7 +192,7 @@ $white: #ffffff;
   .cancelBtn {
     background: transparent;
     border: 1px solid $gray-border;
-    color: #666;
+    color: var(--muted-foreground);
     padding: 0.5rem 1rem;
     border-radius: 6px;
     font-size: 0.9rem;
@@ -204,7 +202,7 @@ $white: #ffffff;
     &:hover {
       border-color: $danger-color;
       color: $danger-color;
-      background-color: rgba($danger-color, 0.05);
+      background-color: var(--btn-danger-bg);
     }
   }
 }

@@ -1,17 +1,16 @@
 // client/src/components/AsideMenu/AsideMenu.module.scss
 
-$theme-red: #a80000;
-$border-color: #ddd;
-$text-color: #555;
+$theme-red: var(--accent-color1);
+$border-color: var(--border);
+$text-color: var(--foreground);
 
 .menuContainer {
   display: flex;
   flex-direction: column;
-  background-color: #fff;
+  background-color: var(--card);
   border: 1px solid $border-color;
-  // border-radius: 4px; // На скріншотах кути гострі, але можна додати
   overflow: hidden;
-  margin-bottom: 30px; // Відступ знизу
+  margin-bottom: 30px;
 }
 
 .menuItem {
@@ -19,7 +18,7 @@ $text-color: #555;
   padding: 15px 20px;
   font-size: 14px;
   font-weight: 500;
-  text-transform: uppercase; // Робимо літери великими як на скріншоті
+  text-transform: uppercase;
   color: $text-color;
   text-decoration: none;
   border-bottom: 1px solid $border-color;
@@ -31,18 +30,14 @@ $text-color: #555;
   }
 
   &:hover {
-    background-color: #f9f9f9;
-    color: #000;
+    background-color: var(--accent);
+    color: var(--foreground);
   }
 
-  // Активний пункт
   &.active {
     background-color: $theme-red;
-    color: #fff;
+    color: var(--accent-color3);
     border-color: $theme-red;
-    
-    // Щоб перекрити border-bottom попереднього елемента, якщо треба,
-    // але зазвичай простого фону достатньо
   }
 }
 
