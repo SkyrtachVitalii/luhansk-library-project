@@ -6,6 +6,89 @@
   z-index: 1000;
 }
 
+.headerContainer {
+  position: relative;
+
+  @media screen and (max-width: 768px) {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+  }
+}
+
+.controlsGroup {
+  position: absolute;
+  top: 16px;
+  right: 20px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px;
+  border: 1px solid var(--header-control-border);
+  border-radius: 8px;
+  background-color: var(--header-control-bg);
+  z-index: 1001;
+}
+
+.themeBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--accent-color3);
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease, color 0.2s ease;
+
+  &:hover {
+    background-color: var(--header-btn-hover-bg);
+    color: var(--accent-color3);
+  }
+
+  &:active {
+    transform: scale(0.93);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--accent-color3);
+    outline-offset: 2px;
+  }
+}
+
+.accessibilityBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 6px;
+  background-color: var(--accessibility-btn-bg);
+  color: var(--accent-color1);
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease, color 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    background-color: var(--accessibility-btn-hover-bg);
+    color: var(--accent-color7);
+    box-shadow: 0 2px 8px var(--accessibility-btn-shadow);
+  }
+
+  &:active {
+    transform: scale(0.93);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--accent-color3);
+    outline-offset: 2px;
+  }
+}
+
+
 .brand {
   display: flex;
   align-items: center;
@@ -52,8 +135,8 @@
     }
   }
   & a.active {
-    color: #fafafa;
-    background-color: #7e0000;
+    color: var(--accent-color3);
+    background-color: var(--accent-color7);
   }
 }
 
@@ -75,11 +158,46 @@
     height: 2px;
     margin-top: 4px;
     border-radius: 1px;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: var(--mobile-toggle-span-bg);
   }
 }
 
 @media screen and (max-width: 768px) {
+  .controlsGroup {
+    position: static;
+    margin-left: auto;
+    border: none;
+    background: transparent;
+    padding: 0;
+    gap: 6px;
+    z-index: auto;
+  }
+
+  .themeBtn {
+    width: 36px;
+    height: 36px;
+    border: 1px solid var(--header-control-border);
+    border-radius: 6px;
+    color: var(--accent-color3);
+    background-color: var(--header-control-bg);
+
+    &:hover {
+      background-color: var(--header-btn-hover-bg);
+    }
+  }
+
+  .accessibilityBtn {
+    width: 36px;
+    height: 36px;
+    border-radius: 6px;
+    background-color: var(--accessibility-btn-bg);
+    color: var(--accent-color1);
+
+    &:hover {
+      background-color: var(--accessibility-btn-hover-bg);
+    }
+  }
+
   .header {
     height: var(--header-height-mobile);
   }
@@ -105,54 +223,12 @@
   }
 
   .nav {
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.4s ease-in-out, opacity 0.4s ease-in-out;
-    flex-direction: column;
-    width: 100%;
-    position: absolute;
-    top: var(--header-height-mobile);
-    left: 0;
-    background-color: var(--accent-color1);
-    flex-wrap: nowrap;
-    gap: 10px;
-    font-size: 0.96rem;
-    margin: 0;
-    color: var(--accent-color3);
-    letter-spacing: -0.5px;
-    z-index: 1000;
-    overflow-y: auto;
-    &__active {
-      max-height: var(--header-height-mobile-menu);
-      overflow-y: auto;
-    }
-    & a {
-      color: var(--foreground-header);
-      text-decoration: none;
-      transition: color 0.3s ease;
-      padding: 4px 8px 19px 16px;
-      &:hover {
-        background-color: var(--accent-color6);
-      }
-    }
-    & a.active {
-      color: #fafafa;
-      background-color: var(--accent-color7);
-    }
+    display: none;
   }
 
   .navToggleMobile {
     display: block;
     margin-top: 0;
     margin-bottom: 0;
-  }
-}
-
-@media screen and (max-width: 480px) {
-  .brand {
-    &__logo {
-      width: 44px;
-      height: 44px;
-    }
   }
 }

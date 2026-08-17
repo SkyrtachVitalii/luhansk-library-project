@@ -6,7 +6,6 @@ import Image from "next/image";
 import styles from "./Header.module.scss";
 import { useTheme } from "next-themes";
 import { useAccessibility } from "@/hooks/useAccessibility";
-import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,8 +13,13 @@ import {
   DropdownMenuTrigger,
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
+import {
+  Sheet,
+  SheetTrigger,
+  SheetContent,
+  SheetTitle,
+} from "@/components/ui/sheet";
 import { Moon, Sun, Accessibility, ZoomIn, ZoomOut, Settings2, RefreshCcw } from "lucide-react";
-import { useWindowWidth } from "../../hooks/useWindowWidth"; // Можна видалити, якщо більше ніде не юзається
 import { usePathname } from "next/navigation";
 import { useState, useEffect, useRef } from "react";
 import { headerMenuItems } from "../../config/menus";
@@ -25,10 +29,9 @@ const Header = () => {
   const headerRef = useRef<HTMLElement>(null);
   const { theme, setTheme } = useTheme();
   const { isGrayscale, toggleGrayscale, increaseFontSize, decreaseFontSize, resetAccessibility } = useAccessibility();
-  const [mobileMenuStatus, setMobileMenuStatus] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const pathname = usePathname();
-  const windowWidth = useWindowWidth(); // Можна видалити, якщо використовувався тільки для заголовка
-  const [isAuth, setIsAuth] = useState(false); // Тимчасово, поки немає реального стану авторизації
+  const [isAuth, setIsAuth] = useState(false);
   const [userName, setUserName] = useState<string | null>(null);
 
   useEffect(() => {
@@ -63,19 +66,7 @@ const Header = () => {
       controller.abort();
       window.removeEventListener("auth-change", checkAuth);
     };
-  }, [pathname]); // Запускається 1 раз при завантаженні
-
-  const breakpoint = 768;
-
-  const toggleMobileMenu = () => {
-    setMobileMenuStatus((prevStatus) => !prevStatus);
-  };
-
-  useEffect(() => {
-    if (windowWidth > breakpoint) {
-      setMobileMenuStatus(false);
-    }
-  }, [windowWidth, breakpoint]);
+  }, [pathname]);
 
   useEffect(() => {
     if (!headerRef.current) return;
@@ -83,7 +74,6 @@ const Header = () => {
     const updateHeight = () => {
       if (headerRef.current) {
         const height = headerRef.current.offsetHeight;
-        // Записуємо змінну прямісінько в стиль кореневого елемента
         document.documentElement.style.setProperty(
           "--header-height",
           `${height}px`
@@ -91,21 +81,17 @@ const Header = () => {
       }
     };
 
-    // 1. Вимірюємо одразу
     updateHeight();
 
-    // 2. Слідкуємо за зміною розміру саме цього елемента
     const observer = new ResizeObserver(updateHeight);
     observer.observe(headerRef.current);
 
     return () => observer.disconnect();
   }, []);
 
-  // 2. ЛОГІКА ВИХОДУ
   const handleLogout = async () => {
     try {
       await authApi.logout();
-      // Після виходу оновлюємо стан авторизації
       setIsAuth(false);
       setUserName(null);
       window.location.href = "/";
@@ -124,7 +110,7 @@ const Header = () => {
 
   return (
     <header className={styles.header} ref={headerRef}>
-      <div className="container container__header">
+      <div className={`container ${styles.headerContainer}`}>
         <Link href="/" className={styles.brand}>
           <Image
             src="/logo.png"
@@ -133,30 +119,20 @@ const Header = () => {
             height={70}
             className={styles.brand__logo}
           />
-
-          {/* --- ЗМІНИ ТУТ: Виводимо обидва варіанти тексту з різними класами --- */}
-
-          {/* Цей текст видно на Desktop, сховано на Mobile */}
           <span
             className={`${styles.brand__siteName} ${styles.brand__siteNameDesktop}`}
           >
             Луганська обласна універсальна наукова бібліотека
           </span>
-
-          {/* Цей текст видно на Mobile, сховано на Desktop */}
           <span
             className={`${styles.brand__siteName} ${styles.brand__siteNameMobile}`}
           >
             ЛОУНБ
           </span>
-
-          {/* ------------------------------------------------------------------ */}
         </Link>
-        <nav
-          className={`${styles.nav} ${
-            mobileMenuStatus ? styles.nav__active : ""
-          }`}
-        >
+
+        {/* Desktop Navigation */}
+        <nav className={styles.nav}>
           {visibleMenuItems.map((item) => (
             <Link
               key={item.name}
@@ -165,11 +141,8 @@ const Header = () => {
                 pathname === item.href ? styles.active : ""
               }`}
               onClick={(e) => {
-                setMobileMenuStatus(false);
                 if (item.id === "login") {
-                  e.preventDefault(); // Зупиняємо стандартний перехід Next.js
-
-                  // Вручну ставимо хеш, що гарантовано запустить подію 'hashchange'
+                  e.preventDefault();
                   window.location.hash = "login";
                 }
                 if (item.id === "logout") {
@@ -182,23 +155,26 @@ const Header = () => {
             </Link>
           ))}
         </nav>
-        <div className="flex items-center gap-2 md:fixed md:right-0 md:top-4 md:flex-col md:z-[10000] md:bg-background md:p-2 md:rounded-l-lg md:shadow-md md:border md:border-r-0">
-          <Button
-            variant="ghost"
-            size="icon"
+
+        <div className={styles.controlsGroup}>
+          <button
             onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-            className="w-10 h-10 md:w-12 md:h-12"
+            className={styles.themeBtn}
             title="Перемкнути тему"
+            type="button"
           >
-            <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-            <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-          </Button>
+            <Sun className="h-5 w-5 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+            <Moon className="absolute h-5 w-5 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+          </button>
 
           <DropdownMenu>
-            <DropdownMenuTrigger title="Доступність" className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground w-10 h-10 md:w-12 md:h-12">
-              <img src="/accessibility.png" alt="Доступність" className="h-5 w-5 md:h-7 md:w-7 object-contain" />
+            <DropdownMenuTrigger
+              title="Налаштування доступності"
+              className={styles.accessibilityBtn}
+            >
+              <Accessibility className="h-5 w-5" />
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
+            <DropdownMenuContent align="end" className="z-[1050]">
               <DropdownMenuItem onClick={toggleGrayscale}>
                 <Settings2 className="mr-2 h-4 w-4" />
                 <span>{isGrayscale ? "Вимкнути відтінки сірого" : "Відтінки сірого"}</span>
@@ -219,11 +195,59 @@ const Header = () => {
             </DropdownMenuContent>
           </DropdownMenu>
 
-          <button onClick={toggleMobileMenu} className={`${styles.navToggleMobile} md:hidden`}>
-            <span className={styles.navToggleMobile__span}></span>
-            <span className={styles.navToggleMobile__span}></span>
-            <span className={styles.navToggleMobile__span}></span>
-          </button>
+          {/* Mobile Navigation Sheet */}
+          <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
+            <SheetTrigger
+              className={`${styles.navToggleMobile} md:hidden`}
+              type="button"
+              aria-label="Меню"
+            >
+              <span className={styles.navToggleMobile__span}></span>
+              <span className={styles.navToggleMobile__span}></span>
+              <span className={styles.navToggleMobile__span}></span>
+            </SheetTrigger>
+            <SheetContent
+              side="top"
+              showClose={true}
+              className="bg-[var(--accent-color1)] border-b border-[var(--header-control-border)] p-6 shadow-2xl text-[var(--foreground-header)]"
+            >
+              <div className="flex items-center justify-between pb-4 mb-4 border-b border-[var(--header-control-border)]">
+                <div className="flex items-center gap-3">
+                  <Image src="/logo.png" alt="Logo" width={40} height={40} />
+                  <span className="font-semibold text-lg text-[var(--foreground-header)]">
+                    ЛОУНБ
+                  </span>
+                </div>
+              </div>
+              <SheetTitle className="sr-only">Мобільне меню навігації</SheetTitle>
+              <nav className="flex flex-col gap-2 font-medium text-base">
+                {visibleMenuItems.map((item) => (
+                  <Link
+                    key={item.name}
+                    href={item.href}
+                    className={`py-3 px-4 rounded-lg transition-all ${
+                      pathname === item.href
+                        ? "bg-[var(--accessibility-btn-bg)] text-[var(--accent-color1)] font-bold shadow-md"
+                        : "text-[var(--foreground-header)] hover:bg-[var(--header-btn-hover-bg)]"
+                    }`}
+                    onClick={(e) => {
+                      setMobileMenuOpen(false);
+                      if (item.id === "login") {
+                        e.preventDefault();
+                        window.location.hash = "login";
+                      }
+                      if (item.id === "logout") {
+                        e.preventDefault();
+                        handleLogout();
+                      }
+                    }}
+                  >
+                    {item.name}
+                  </Link>
+                ))}
+              </nav>
+            </SheetContent>
+          </Sheet>
         </div>
       </div>
     </header>
