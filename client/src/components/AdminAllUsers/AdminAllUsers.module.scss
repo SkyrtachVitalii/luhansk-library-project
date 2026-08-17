@@ -1,5 +1,5 @@
 .wrapper {
-  background: #fff;
+  background: var(--card);
   border-radius: 8px;
   width: 100%;
 }
@@ -10,19 +10,19 @@
   align-items: center;
   margin-bottom: 20px;
   padding: 10px;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid var(--border);
 
   h1 {
     font-size: 1.5rem;
     font-weight: bold;
-    color: #333;
+    color: var(--foreground);
     margin: 0;
   }
 }
 
 .btnAdd {
-  background-color: #b91c1c; // Червоний як на скріні (Library Red)
-  color: white;
+  background-color: var(--accent-color1);
+  color: var(--accent-color3);
   padding: 8px 16px;
   border-radius: 4px;
   text-decoration: none;
@@ -33,31 +33,32 @@
   transition: background 0.2s;
 
   &:hover {
-    background-color: #991b1b;
+    background-color: var(--accent-color7);
   }
 }
 
 .tableContainer {
-  overflow-x: auto; // Горизонтальний скрол для мобільних
-  border: 1px solid #e5e7eb;
+  overflow-x: auto;
+  border: 1px solid var(--border);
   border-radius: 6px;
 }
 
 .table {
   width: 100%;
   border-collapse: collapse;
-  min-width: 900px; // Щоб не ламалася верстка
+  min-width: 900px;
 
   th, td {
     padding: 12px 16px;
     text-align: left;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid var(--border);
     font-size: 0.95rem;
+    color: var(--foreground);
   }
 
   th {
-    background-color: #f9fafb;
-    color: #b91c1c; // Червоні заголовки як на скріні
+    background-color: var(--table-header-bg);
+    color: var(--table-header-text);
     font-weight: 600;
     text-transform: uppercase;
     font-size: 0.85rem;
@@ -68,7 +69,7 @@
   }
 
   tr:hover {
-    background-color: #fff1f2; // Легкий червоний відтінок при наведенні
+    background-color: var(--table-hover-bg);
   }
 }
 
@@ -91,14 +92,14 @@
   text-decoration: none;
 
   &.edit {
-    background-color: #eff6ff;
-    color: #1d4ed8;
-    &:hover { background-color: #dbeafe; }
+    background-color: var(--btn-info-bg);
+    color: var(--btn-info-text);
+    &:hover { background-color: var(--btn-info-hover-bg); }
   }
 
   &.delete {
-    background-color: #fef2f2;
-    color: #b91c1c;
-    &:hover { background-color: #fee2e2; }
+    background-color: var(--btn-danger-bg);
+    color: var(--btn-danger-text);
+    &:hover { background-color: var(--btn-danger-hover-bg); }
   }
 }

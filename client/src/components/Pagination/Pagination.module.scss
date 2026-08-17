@@ -1,70 +1,61 @@
 // client/src/components/Pagination/Pagination.module.scss
 
-$theme-red: #a80000; // Темно-червоний колір як на скріншоті
-$text-gray: #999;
-$border-color: #ddd;
+$theme-red: var(--accent-color1);
+$text-gray: var(--muted-foreground);
+$border-color: var(--border);
 
 .paginationContainer {
-  // 1. Змінюємо inline-flex на flex (тепер це блочний елемент)
-  display: flex; 
-  
-  // 2. Вказуємо ширину "під контент", щоб рамка облягала кнопки, а не розтягувалась на весь екран
+  display: flex;
   width: fit-content;
   list-style: none;
   border: 1px solid $border-color;
-  border-radius: 4px; // Легке заокруглення країв всього блоку
-  overflow: hidden;   // Щоб кути кнопок не вилазили за заокруглення
-  margin: 40px auto;  // Центрування
-  background-color: #fff;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.05); // Легка тінь для об'єму
+  border-radius: 4px;
+  overflow: hidden;
+  margin: 40px auto;
+  background-color: var(--card);
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
 }
 
 .pageBtn {
   display: flex;
   align-items: center;
   justify-content: center;
-  
-  // Розміри та відступи
+
   padding: 10px 16px;
-  min-width: 45px; // Мінімальна ширина для цифр
+  min-width: 45px;
   height: 42px;
-  
-  // Типографіка
+
   font-family: inherit;
   font-size: 14px;
   font-weight: 500;
   color: $text-gray;
   line-height: 1.2;
-  
-  background-color: #fff;
+
+  background-color: var(--card);
   border: none;
-  border-right: 1px solid $border-color; // Розділювач справа
+  border-right: 1px solid $border-color;
   cursor: pointer;
   transition: all 0.2s ease-in-out;
   outline: none;
 
-  // Прибираємо розділювач у останньої кнопки
   &:last-child {
     border-right: none;
   }
 
-  // Ховер ефект (якщо кнопка не активна і не вимкнена)
   &:hover:not(:disabled):not(.active) {
-    background-color: #f7f7f7;
-    color: $theme-red; // При наведенні текст стає червоним
+    background-color: var(--accent);
+    color: $theme-red;
   }
 
-  // Стан Disabled (коли не можна натиснути)
   &:disabled {
-    color: #ccc;
+    color: var(--muted-foreground);
     cursor: default;
-    background-color: #fff;
+    background-color: var(--card);
   }
 
-  // АКТИВНА СТОРІНКА (Червоний фон)
   &.active {
     background-color: $theme-red;
-    color: #fff;
+    color: var(--accent-color3);
     border-color: $theme-red;
     cursor: default;
   }

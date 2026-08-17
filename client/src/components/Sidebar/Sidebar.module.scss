@@ -6,13 +6,12 @@
 }
 
 .widgetPlaceholder {
-  border: 1px solid #ddd;
-  background-color: #f9f9f9;
+  border: 1px solid var(--border);
+  background-color: var(--card);
   padding: 20px;
   text-align: center;
-  color: #666;
+  color: var(--muted-foreground);
   border-radius: 8px;
-  /* Тут пізніше буде справжній iframe від Facebook */
   min-height: 300px;
   display: flex;
   align-items: center;

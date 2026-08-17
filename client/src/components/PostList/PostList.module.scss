@@ -12,10 +12,10 @@
 
 .postItem {
   padding-bottom: 30px;
-  border-bottom: 1px solid #e0e0e0; // Розділювальна лінія знизу
+  border-bottom: 1px solid var(--border);
 
   &:last-child {
-    border-bottom: none; // Прибираємо лінію у останнього поста
+    border-bottom: none;
   }
 }
 
@@ -24,8 +24,7 @@
 }
 
 .postTitle {
-  // Використовуємо змінну для червоного кольору (якщо вона є у globals.scss), інакше хардкод
-  color: var(--accent-color-red, #c00000);
+  color: var(--accent-color1);
   font-size: 1.8rem;
   font-weight: 400;
   line-height: 1.3;
@@ -46,8 +45,8 @@
 
 .postDate {
   display: block;
-  text-align: right; // Дата праворуч
-  color: #888;
+  text-align: right;
+  color: var(--muted-foreground);
   font-size: 0.9rem;
   font-weight: bold;
 }
@@ -55,21 +54,18 @@
 .postImageContainer {
   position: relative;
   width: 100%;
-  // Встановлюємо фіксовану висоту для зображення або співвідношення сторін
-  aspect-ratio: 1200 / 458; // Приклад для 1200x458px
+  aspect-ratio: 1200 / 458;
   margin-bottom: 25px;
-  background-color: #f0f0f0; // Сірий фон, поки вантажиться картинка
+  background-color: var(--muted);
   border-radius: 8px;
   overflow: hidden;
 
-  // Адаптив для мобільних
   @media (max-width: 768px) {
     height: auto;
     margin-bottom: 15px;
   }
 
   img {
-    // Важливо для next/image, щоб картинка заповнила контейнер і не спотворилась
     object-fit: cover;
   }
 }
@@ -77,12 +73,11 @@
 .postContent {
   font-size: 1.1rem;
   line-height: 1.6;
-  color: var(--foreground-primary, #333);
+  color: var(--foreground);
   margin-top: 20px;
   overflow-wrap: break-word;
   word-break: break-word;
 
-  // Стилі для звичайного тексту (нових постів)
   white-space: pre-wrap;
 
   @media (max-width: 768px) {
@@ -97,31 +92,24 @@
     font-family: inherit;
     font-weight: 400;
     line-height: 1.1;
-    color: #444444;
+    color: var(--accent-color2);
 
     @media (max-width: 768px) {
       font-size: 20px;
     }
   }
   >:first-child {
-    /* стилі для першого блоку */
     display: none;
   }
 }
 
-// Спеціальний клас для архівних новин
 .archivedContent {
-  // Тут ми скидаємо white-space, бо HTML вже має свої відступи
   white-space: normal;
 
-  // Хитрість: ховаємо всі картинки ВСЕРЕДИНІ тексту архівних новин,
-  // бо там старі неробочі шляхи (/upload/...).
-  // Головна картинка зверху все одно залишиться!
   img {
     display: none !important;
   }
 
-  // Трохи стилізуємо старі параграфи
   p {
     margin-bottom: 1rem;
     text-align: justify;
@@ -137,7 +125,7 @@
   text-align: right;
 
   &__link {
-    color: #c00000;
+    color: var(--accent-color1);
     font-weight: 600;
     text-decoration: none;
 

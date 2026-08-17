@@ -4,119 +4,163 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 0 0% 3.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 0 0% 3.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 3.9%;
-    --primary: 0 0% 9%;
-    --primary-foreground: 0 0% 98%;
-    --secondary: 0 0% 96.1%;
-    --secondary-foreground: 0 0% 9%;
-    --muted: 0 0% 96.1%;
-    --muted-foreground: 0 0% 45.1%;
-    --accent: 0 0% 96.1%;
-    --accent-foreground: 0 0% 9%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 89.8%;
-    --input: 0 0% 89.8%;
-    --ring: 0 0% 3.9%;
+    --background: #ffffff;
+    --foreground: #171717;
+    --card: #ffffff;
+    --card-foreground: #171717;
+    --popover: #ffffff;
+    --popover-foreground: #171717;
+    --primary: #9f0000;
+    --primary-foreground: #ffffff;
+    --secondary: #f4f4f5;
+    --secondary-foreground: #18181b;
+    --muted: #f4f4f5;
+    --muted-foreground: #71717a;
+    --accent: #f4f4f5;
+    --accent-foreground: #18181b;
+    --destructive: #ef4444;
+    --destructive-foreground: #fafafa;
+    --border: #e4e4e7;
+    --input: #e4e4e7;
+    --ring: #9f0000;
     --radius: 0.5rem;
+
+    --background-to-top-btn: #aaa;
+    --primary-container: 1200px;
+    --accent-color1: #9f0000;
+    --accent-color2: #444444;
+    --accent-color3: #ffffff;
+    --accent-color4: slategray;
+    --accent-color5: #474854;
+    --accent-color6: #437fa3;
+    --accent-color7: #7e0000;
+    --footer-divider: #ddd;
+    --footer-menu-link: #474854;
+    --footer-menu-left-border: #eeeeee;
+    --footer-column-menu-title-size: 18px;
+    --footer-column-menu-title-size-tab: 16px;
+    --footer-column-menu-title-size-mobile: 14px;
+    --footer-column-menu-link-size: 16px;
+    --footer-column-menu-link-size-tab: 14px;
+    --footer-column-menu-link-size-mobile: 12px;
+    --socials-icon-gap: 8px;
+    --socials-icon-gap-tab: 6px;
+    --socials-icon-gap-mobile: 4px;
+    --socials-icon-width: 40px;
+    --socials-icon-width-tab: 34px;
+    --socials-icon-width-mobile: 40px;
+    --socials-icon-height: 40px;
+    --socials-icon-height-tab: 34px;
+    --socials-icon-height-mobile: 40px;
+    --socialsHelp-title: 16px;
+    --socialsHelp-icon-gap: 8px;
+    --socialsHelp-icon-gap-tab: 6px;
+    --socialsHelp-icon-gap-mobile: 4px;
+    --socialsHelp-icon-width: 40px;
+    --socialsHelp-icon-width-tab: 34px;
+    --socialsHelp-icon-width-mobile: 40px;
+    --socialsHelp-icon-height: 40px;
+    --socialsHelp-icon-height-tab: 34px;
+    --socialsHelp-icon-height-mobile: 40px;
+
+    --site-name-size: 1.5rem;
+    --site-name-size-tab: 1.6rem;
+    --site-name-size-mobile: 1.2rem;
+
+    --background-header: #9f0000;
+    --foreground-header: #ffffff;
+    --background-footer: #f8f8f8;
+    --foreground-footer: #333333;
+
+    --table-header-bg: #f7f7f7;
+    --table-header-text: #b91c1c;
+    --table-row-even-bg: #fcfcfc;
+    --table-hover-bg: #fff1f2;
+    --panel-heading-bg: #f5f5f5;
+    --btn-info-bg: #eff6ff;
+    --btn-info-text: #1d4ed8;
+    --btn-info-hover-bg: #dbeafe;
+    --btn-danger-bg: #fef2f2;
+    --btn-danger-text: #b91c1c;
+    --btn-danger-hover-bg: #fee2e2;
+    --role-badge-bg: #e0e7ff;
+    --role-badge-text: #3730a3;
+    --accessibility-btn-bg: #ffffff;
+    --accessibility-btn-hover-bg: #f0f0f0;
+    --accessibility-btn-shadow: rgba(0, 0, 0, 0.15);
+    --carousel-dot-border: #ffffff;
+    --carousel-dot-active-bg: #ffffff;
+    --header-control-border: rgba(255, 255, 255, 0.4);
+    --header-control-bg: rgba(255, 255, 255, 0.05);
+    --header-btn-hover-bg: rgba(255, 255, 255, 0.2);
+    --mobile-toggle-span-bg: rgba(0, 0, 0, 0.5);
+
+    --header-height: 208px;
+    --header-height-mobile: 82px;
+    --header-height-mobile-menu: 400px;
+    --width-tab: 768px;
   }
+
   .dark {
-    --background: 0 0% 3.9%;
-    --foreground: 0 0% 98%;
-    --card: 0 0% 3.9%;
-    --card-foreground: 0 0% 98%;
-    --popover: 0 0% 3.9%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 0 0% 98%;
-    --primary-foreground: 0 0% 9%;
-    --secondary: 0 0% 14.9%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 0 0% 14.9%;
-    --muted-foreground: 0 0% 63.9%;
-    --accent: 0 0% 14.9%;
-    --accent-foreground: 0 0% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 14.9%;
-    --input: 0 0% 14.9%;
-    --ring: 0 0% 83.1%;
-  }
-}
+    --background: #121214;
+    --foreground: #e6e6e6;
+    --card: #1c1c21;
+    --card-foreground: #e6e6e6;
+    --popover: #1e1e24;
+    --popover-foreground: #f3f4f6;
+    --primary: #6e0d0d;
+    --primary-foreground: #ffffff;
+    --secondary: #27272a;
+    --secondary-foreground: #fafafa;
+    --muted: #27272a;
+    --muted-foreground: #a1a1aa;
+    --accent: #2d2d38;
+    --accent-foreground: #ffffff;
+    --destructive: #7f1d1d;
+    --destructive-foreground: #fafafa;
+    --border: #333340;
+    --input: #333340;
+    --ring: #6e0d0d;
 
-:root {
-  --background: #ffffff;
-  --background-to-top-btn: #aaa;
-  --foreground: #171717;
-  --primary-container: 1200px;
-  --accent-color1: #9f0000;
-  --accent-color2: #444444;
-  --accent-color3: #ffffff;
-  --accent-color4: slategray;
-  --accent-color5: #474854;
-  --accent-color6: #437fa3;
-  --accent-color7: #7e0000;
-  --footer-divider: #ddd;
-  --footer-menu-link: #474854;
-  --footer-menu-left-border: #eeeeee;
-  --footer-column-menu-title-size: 18px;
-  --footer-column-menu-title-size-tab: 16px;
-  --footer-column-menu-title-size-mobile: 14px;
-  --footer-column-menu-link-size: 16px;
-  --footer-column-menu-link-size-tab: 14px;
-  --footer-column-menu-link-size-mobile: 12px;
-  --socials-icon-gap: 8px;
-  --socials-icon-gap-tab: 6px;
-  --socials-icon-gap-mobile: 4px;
-  --socials-icon-width: 40px;
-  --socials-icon-width-tab: 34px;
-  --socials-icon-width-mobile: 40px;
-  --socials-icon-height: 40px;
-  --socials-icon-height-tab: 34px;
-  --socials-icon-height-mobile: 40px;
-  --socialsHelp-title: 16px;
-  --socialsHelp-icon-gap: 8px;
-  --socialsHelp-icon-gap-tab: 6px;
-  --socialsHelp-icon-gap-mobile: 4px;
-  --socialsHelp-icon-width: 40px;
-  --socialsHelp-icon-width-tab: 34px;
-  --socialsHelp-icon-width-mobile: 40px;
-  --socialsHelp-icon-height: 40px;
-  --socialsHelp-icon-height-tab: 34px;
-  --socialsHelp-icon-height-mobile: 40px;
-  // --site-name-size: clamp(1rem, 0.6vw + 1rem, 1.5rem);
-  --site-name-size: 1.5rem;
-  --site-name-size-tab: 1.6rem;
-  --site-name-size-mobile: 1.2rem;
+    --background-to-top-btn: #333338;
+    --accent-color1: #6e0d0d;
+    --accent-color2: #d1d1d1;
+    --accent-color3: #ffffff;
+    --accent-color4: #94a3b8;
+    --accent-color5: #a1a1aa;
+    --accent-color6: #5b9bd5;
+    --accent-color7: #8b1a1a;
+    --footer-divider: #2a2a32;
+    --footer-menu-link: #b0b0b8;
+    --footer-menu-left-border: #2a2a32;
 
-  // Нові змінні для хедера та футера, якщо їх ще немає в SCSS-змінних
-  --background-header: #007bff;
-  --foreground-header: white;
-  --background-footer: #f8f8f8;
-  --foreground-footer: white;
-
-  --header-height: 208px;
-  --header-height-mobile: 102px;
-  --header-height-mobile-menu: 300px;
-
-  --width-tab: 768px;
-}
-
-@layer base {
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-
-    --background-header: #1a1a1a;
-    --foreground-header: #ededed;
-    --background-footer: #222;
+    --background-header: #5a0000;
+    --foreground-header: #f1f1f1;
+    --background-footer: #18181c;
     --foreground-footer: #cccccc;
+
+    --table-header-bg: #1a1a20;
+    --table-header-text: #ef4444;
+    --table-row-even-bg: #16161a;
+    --table-hover-bg: #2e1216;
+    --panel-heading-bg: #24242c;
+    --btn-info-bg: #1e293b;
+    --btn-info-text: #60a5fa;
+    --btn-info-hover-bg: #334155;
+    --btn-danger-bg: #3b1219;
+    --btn-danger-text: #f87171;
+    --btn-danger-hover-bg: #4c1d24;
+    --role-badge-bg: #2d3748;
+    --role-badge-text: #93c5fd;
+    --accessibility-btn-bg: #ffffff;
+    --accessibility-btn-hover-bg: #e0e0e0;
+    --accessibility-btn-shadow: rgba(0, 0, 0, 0.4);
+    --carousel-dot-border: #ffffff;
+    --carousel-dot-active-bg: #ffffff;
+    --header-control-border: rgba(255, 255, 255, 0.4);
+    --header-control-bg: rgba(255, 255, 255, 0.05);
+    --header-btn-hover-bg: rgba(255, 255, 255, 0.2);
+    --mobile-toggle-span-bg: rgba(255, 255, 255, 0.8);
   }
 }
 
@@ -124,7 +168,14 @@
 body.theme-grayscale {
   // Визнач кольори для сірої теми тут
   --background: #f0f0f0; // Світло-сірий фон
-  --foreground: #333333; // Темно-сірий текст
+  --foreground: #111111; // Темно-сірий текст
+  --card: #ffffff;
+  --card-foreground: #111111;
+  --popover: #ffffff;
+  --popover-foreground: #111111;
+  --accent: #e5e5e5;
+  --accent-foreground: #000000;
+  --border: #bbbbbb;
   --accent-color1: #666666; // Інші акцентні кольори в сірих тонах
   --accent-color2: #999999;
   --accent-color3: #cccccc;
@@ -137,11 +188,9 @@ body.theme-grayscale {
   --background-footer: #777777;
   --foreground-footer: #dddddd;
 
-  // Додаткові стилі для покращення доступності, якщо потрібно
   filter: grayscale(
     100%
-  ); /* Це може допомогти, але будь обережним з картинками */
-  /* Або краще окремо стилізувати елементи, уникаючи filter, щоб не впливати на зображення */
+  );
 }
 
 :target, [id] {
@@ -319,10 +368,10 @@ a {
    ========================================= */
 
 $color-primary: var(--accent-color1); // Ваш бордовий
-$color-text-main: #666666;
-$color-text-light: #555555;
-$color-border: #eee;
-$color-bg-code: #f5f5f5;
+$color-text-main: var(--foreground);
+$color-text-light: var(--accent-color5);
+$color-border: var(--footer-divider);
+$color-bg-code: var(--card);
 
 .content-body {
   font-family: inherit; // Або вкажіть ваш шрифт явно
@@ -375,7 +424,7 @@ $color-bg-code: #f5f5f5;
   h4,
   h5,
   h6 {
-    color: #444444;
+    color: var(--accent-color2);
     margin-top: 0.5em;
     margin-bottom: 0.3em;
     font-weight: 400;
@@ -417,7 +466,7 @@ $color-bg-code: #f5f5f5;
   p {
     margin-bottom: 1.2em;
     text-align: justify;
-    color: #666666;
+    color: var(--foreground);
     line-height: 1.8;
 
     @media (max-width: 768px) {
@@ -477,13 +526,14 @@ $color-bg-code: #f5f5f5;
   }
 
   // --- ЦИТАТИ ---
+  // --- ЦИТАТИ ---
   blockquote {
     margin: 2em 0;
     padding: 1em 1.5em;
     border-left: 5px solid $color-primary; // Червона лінія зліва
-    background-color: #f9f9f9;
+    background-color: var(--card);
     font-style: italic;
-    color: #555;
+    color: var(--foreground);
 
     p:last-child {
       margin-bottom: 0;
@@ -508,13 +558,14 @@ $color-bg-code: #f5f5f5;
     }
 
     th {
-      background-color: #f7f7f7;
+      background-color: var(--table-header-bg);
+      color: var(--table-header-text);
       font-weight: 600;
     }
 
     // "Зебра" для рядків
     tr:nth-child(even) {
-      background-color: #fcfcfc;
+      background-color: var(--table-row-even-bg);
     }
   }
 
@@ -531,8 +582,8 @@ $color-bg-code: #f5f5f5;
   .panel-group,
   .panel {
     margin-bottom: 20px;
-    background-color: #fff;
-    border: 1px solid #ddd;
+    background-color: var(--card);
+    border: 1px solid var(--border);
     border-radius: 4px;
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
     padding: 16px;
@@ -540,8 +591,8 @@ $color-bg-code: #f5f5f5;
 
   .panel-heading {
     padding: 10px 15px;
-    border-bottom: 1px solid #ddd;
-    background-color: #f5f5f5;
+    border-bottom: 1px solid var(--border);
+    background-color: var(--panel-heading-bg);
     border-top-left-radius: 3px;
     border-top-right-radius: 3px;
 
@@ -555,7 +606,7 @@ $color-bg-code: #f5f5f5;
       display: block;
       width: 100%;
       text-decoration: none;
-      color: #333;
+      color: var(--foreground);
       font-weight: bold;
 
       // Іконка стрілочки (опціонально)
@@ -563,7 +614,7 @@ $color-bg-code: #f5f5f5;
         content: "+";
         float: right;
         font-weight: bold;
-        color: #777;
+        color: var(--muted-foreground);
       }
 
       &[aria-expanded="true"]::after {
@@ -580,7 +631,7 @@ $color-bg-code: #f5f5f5;
 
   .panel-body {
     padding: 15px;
-    border-top: 1px solid #ddd;
+    border-top: 1px solid var(--border);
   }
 
   /* ЛОГІКА ПРИХОВУВАННЯ/ВІДОБРАЖЕННЯ */
@@ -613,17 +664,15 @@ $color-bg-code: #f5f5f5;
   display: block;
   padding: 10px 15px;
   margin-bottom: -1px;
-  background-color: #ffffff;
-  border: 1px solid #dddddd !important;
+  background-color: var(--card);
+  border: 1px solid var(--border) !important;
 }
 
 a.list-group-item, button.list-group-item {
-  color: #555555;
+  color: var(--foreground);
 }
 
 .list-group-item:first-child {
   border-top-right-radius: 3px;
   border-top-left-radius: 3px;
-}
-
 }

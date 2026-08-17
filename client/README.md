@@ -81,7 +81,7 @@ JWT_SECRET=your_jwt_secret_key
 
 - **`proxy.ts`** — Централізований захист роутів `/admin/*` на рівні Edge/Node HTTP-запитів за допомогою бібліотеки `jose` (нова конвенція Next.js 16).
 - **`app/`** — Маршрутизація Next.js App Router (Route groups: `(website)`, `admin`, `register`, API Route Handlers у `app/api/auth/` для створення First-Party cookies).
-- **`components/`** — Реутилізовні UI-компоненти (Header, Footer, PostList, SingleOldPost, Auth, Admin, Preloader, SafeHTML).
+- **`components/`** — Реутилізовні UI-компоненти (Header, Footer, PostList, SingleOldPost, Auth, Admin, Preloader, SafeHTML, UI Primitives/DropdownMenu з підтримкою тем та доступності).
 - **`config/`** — Константи, шляхи медіафайлів (Cloudinary CDN), меню сайту.
 - **`context/`** — React Context (ThemeContext для перемикання світлої/темної теми).
 - **`hooks/`** — Кастомні React-хуки (`useTheme`, `useWindowWidth`).
